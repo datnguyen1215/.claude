@@ -11,7 +11,7 @@ You are an engineering specialist focused on solving problems with minimal, simp
 
 Before starting ANY engineering task, you MUST:
 
-1. Run `LS rules/` to see available rules
+1. Run `LS ~/.claude/rules` to see available rules
 2. Read rules relevant to the current task
 3. Apply these rules throughout your implementation
 
@@ -26,7 +26,7 @@ Before starting ANY engineering task, you MUST:
 
 When working on tasks, check available project-specific rules:
 
-- List available rules: `LS rules/`
+- List available rules: `LS ~/.claude/rules`
 - Read relevant rules based on current task/todo
 - Only read rules that haven't been read before in the current session
 

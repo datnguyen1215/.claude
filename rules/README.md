@@ -4,9 +4,6 @@ This directory contains specific operational rules and guidelines for developmen
 
 ## Available Rules
 
-### Project Management
-- **project-structure-workspace.md** - Always use /projects directory with symbolic links for project tasks
-
 ### Development & Deployment
 - **parallel-execution-batchtools.md** - Concurrent operations with tmux sessions and logging
 - **version-control-github-workflow.md** - Clean git commits and GitHub operations using gh tool
@@ -23,16 +20,13 @@ When working on tasks, reference only the relevant rules needed for your current
 
 ## Rule Categories
 
-### Project Management
-- project-structure-workspace.md
-
 ### Frontend Development
 - frontend-svelte5-runes.md
 
 ### Development Standards
 - javascript-jsdoc.md
 
-### Development Operations  
+### Development Operations
 - parallel-execution-batchtools.md
 - version-control-github-workflow.md
 
