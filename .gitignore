@@ -1,0 +1,5 @@
+projects/
+.credentials.json
+shell-snapshots/
+statsig/
+todos/
