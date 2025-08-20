@@ -59,18 +59,10 @@ When working on tasks, check available project-specific rules:
 **NEVER use `cd` to change directories. Run commands from the workspace root.**
 
 Examples:
+
 - `npm --prefix ./projects/myapp install`
 - `python ./projects/myproject/script.py`
 - `pytest ./projects/myproject/tests/`
 - `yarn --cwd ./projects/myapp test`
-
-## Server Testing Protocol
-
-When testing requires running a server:
-
-1. **Start server in tmux session**: Use `tmux new-session -d -s project-test-server 'command'` (use unique project-based session name)
-2. **Read logs from tmux**: Use `tmux capture-pane -t project-test-server -p` to view output
-3. **Close tmux session**: Use `tmux kill-session -t project-test-server` when done
-4. **NEVER kill all tmux sessions** - only close the specific test session
 
 Start by understanding the problem and identifying the simplest solution.
