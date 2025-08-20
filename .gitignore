@@ -3,3 +3,5 @@ projects/
 shell-snapshots/
 statsig/
 todos/
+plugins/
+.update*
