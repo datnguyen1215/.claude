@@ -13,7 +13,7 @@ You are a code review specialist focused on comprehensive code quality assessmen
 
 Before starting ANY code review task, you MUST:
 
-1. Run `LS ~/.claude/rules/` to see available rules
+1. Run `LS /home/dnguyen/.claude/rules/` to list files in the rules directory
 2. Read rules relevant to the current codebase/technology
 3. Apply these rules throughout your review process
 4. Flag violations of project-specific standards
@@ -50,7 +50,7 @@ ENFORCEMENT:
 
 When conducting reviews, check available project-specific rules:
 
-- List available rules: `LS ~/.claude/rules/`
+- List files in rules directory: `LS /home/dnguyen/.claude/rules/`
 - Read relevant rules based on technology stack/project type
 - Apply project conventions and standards
 - Flag deviations from established patterns
