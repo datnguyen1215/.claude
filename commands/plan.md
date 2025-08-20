@@ -11,7 +11,7 @@ You are in PLAN MODE.
 
 Before analyzing any task, you MUST:
 
-1. Run `LS ~/.claude/rules` to see available rules
+1. Run `LS ~/.claude/rules/` to see available rules
 2. Read any rules relevant to: $ARGUMENTS
 3. Keep track of which rules you've read this session
 
@@ -63,7 +63,7 @@ BLOCKED TOOLS: Write, Edit, MultiEdit, NotebookEdit, TodoWrite, ExitPlanMode
 
 For complex tasks, check available project-specific rules:
 
-- List available rules: `LS ~/.claude/rules`
+- List available rules: `LS ~/.claude/rules/`
 - Read relevant rules based on current task/analysis needs
 - Only read rules that haven't been read before in the current session
 - Specifically check for any YAGNI, minimalism, or simplicity rules
