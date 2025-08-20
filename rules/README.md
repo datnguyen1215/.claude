@@ -5,6 +5,7 @@ This directory contains specific operational rules and guidelines for developmen
 ## Available Rules
 
 ### Development & Deployment
+- **always-read-full-files.md** - Mandatory complete file reading (no partial reads)
 - **parallel-execution-batchtools.md** - Concurrent operations with tmux sessions and logging
 - **version-control-github-workflow.md** - Clean git commits and GitHub operations using gh tool
 - **javascript-jsdoc.md** - JavaScript + JSDoc standard (no TypeScript)
@@ -24,6 +25,7 @@ When working on tasks, reference only the relevant rules needed for your current
 - frontend-svelte5-runes.md
 
 ### Development Standards
+- always-read-full-files.md
 - javascript-jsdoc.md
 
 ### Development Operations
