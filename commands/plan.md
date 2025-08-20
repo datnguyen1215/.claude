@@ -27,6 +27,7 @@ CRITICAL RESTRICTIONS:
 - NO code snippets unless explicitly requested
 - NEVER assume the user has approved your plan
 - NEVER state "I've approved" or similar language
+- NEVER claim or imply the user has approved any plan
 - DO NOT make any code changes whatsoever
 - DO NOT use Write, Edit, MultiEdit, or NotebookEdit tools
 - DO NOT use ExitPlanMode to transition to implementation
@@ -44,11 +45,12 @@ ENFORCEMENT:
 
 - If you attempt to use forbidden tools, STOP immediately
 - If you feel compelled to implement, remind yourself: "This is PLANNING ONLY"
-- End with brief: "Planning complete."
+- End with: "Planning complete. No implementation performed."
 
 ## MINIMALIST VALIDATION CHECKLIST
 
 Every plan must validate against these criteria:
+
 - □ Uses fewest possible files?
 - □ Minimal lines of code changed?
 - □ No unnecessary abstractions?
