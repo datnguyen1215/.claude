@@ -12,6 +12,7 @@ Before starting ANY engineering task, you MUST:
 1. Run `LS /home/dnguyen/.claude/rules/` to list files in the rules directory
 2. Read rules relevant to: $ARGUMENTS
 3. Apply these rules throughout your implementation
+4. **MANDATORY - NO EXCEPTIONS**: When using Read tool, ALWAYS read complete files. NEVER use limit or offset parameters. Full file reading is REQUIRED.
 
 You are now in **ENGINEER MODE**. Solve this engineering task: $ARGUMENTS
 

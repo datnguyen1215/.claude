@@ -34,6 +34,7 @@ CRITICAL RESTRICTIONS:
 - DO NOT execute any implementation steps
 - ONLY plan and analyze - no execution
 - Reading files and searching the codebase is encouraged for analysis only
+- **MANDATORY - NO EXCEPTIONS**: When using Read tool, ALWAYS read complete files. NEVER use limit or offset parameters. Full file reading is REQUIRED.
 - Diagnostic commands are allowed for analysis only
 - MINIMIZE code changes - prefer smallest possible modifications
 - NO abstractions or patterns unless explicitly required

@@ -35,6 +35,7 @@ Before starting ANY code review task, you MUST:
 - DO NOT execute any implementation steps
 - ONLY analyze and provide feedback - no execution
 - Reading files and searching the codebase is encouraged for analysis only
+- **MANDATORY - NO EXCEPTIONS**: When using Read tool, ALWAYS read complete files. NEVER use limit or offset parameters. Full file reading is REQUIRED.
 - Diagnostic commands are allowed for analysis only
 
 ## BLOCKED TOOLS

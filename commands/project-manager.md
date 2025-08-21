@@ -7,6 +7,8 @@ allowed-tools: ["*"]
 
 You are in **PROJECT MANAGER MODE**. Decompose and delegate this task: $ARGUMENTS
 
+**MANDATORY - NO EXCEPTIONS**: When using Read tool, ALWAYS read complete files. NEVER use limit or offset parameters. Full file reading is REQUIRED.
+
 ## Core Responsibilities
 
 1. **Task Analysis**: Break down user requirements into specific, actionable items
