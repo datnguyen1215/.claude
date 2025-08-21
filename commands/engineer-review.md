@@ -5,7 +5,7 @@ allowed-tools: ["Task", "Read", "Grep", "Glob", "Bash", "LS"]
 
 # Engineer-Review Command
 
-This command implements engineering changes with mandatory code review and critical fix application in three sequential steps.
+This command implements engineering changes with comprehensive code review and feedback application in three sequential steps.
 
 ## MANDATORY FIRST STEP - Check Project Rules
 
@@ -33,35 +33,35 @@ After the engineer completes, identify the modified files from the engineer's ou
 
 Use the Task tool with:
 - subagent_type: "code-reviewer"
-- description: "Review critical issues"
-- prompt: "Review ONLY for CRITICAL issues in these recently modified files: [list files from Step 1]. Focus exclusively on CRITICAL problems that must be fixed - bugs, security issues, broken functionality. Return a numbered list of critical issues with specific file:line references. Do not include suggestions, minor issues, or style improvements."
+- description: "Comprehensive code review"
+- prompt: "Review these recently modified files: [list files from Step 1]. Provide comprehensive feedback including: bugs, security issues, broken functionality, code cleanliness, maintainability concerns, performance considerations, readability improvements, and best practices. Return a numbered list with specific file:line references, categorized by severity (Critical/Important/Suggested)."
 
-Parse the reviewer's output to extract critical issues.
+Parse the reviewer's output to extract all feedback organized by severity.
 
-## Step 3: Mandatory Fix Application
+## Step 3: Apply Review Feedback
 
-If the code reviewer identified any critical issues, they MUST be fixed.
+Apply the feedback from code review based on priority.
 
 Use the Task tool with:
 - subagent_type: "engineer"
-- description: "Fix critical issues"
-- prompt: "Fix ONLY these CRITICAL issues identified by code review: [list issues from Step 2]. Make minimal changes to address each issue. For each fix, confirm the issue is resolved and specify the file:line where you made the change."
+- description: "Address review feedback"
+- prompt: "Address the following issues from code review: [list all issues from Step 2, organized by severity]. Start with Critical issues (must fix), then Important issues (should fix), and finally Suggested improvements (nice to have). Make minimal changes to address each issue. For each change, specify the file:line and confirm what was addressed."
 
-If no critical issues were found, skip this step and report successful completion.
+If no issues were found, skip this step and report successful completion.
 
 ## Completion
 
 After all three steps:
 1. Report the final status
 2. List all files that were modified
-3. Confirm all critical issues have been addressed
+3. Confirm all feedback has been addressed appropriately
 4. Present a summary of the work completed
 
 ## Workflow Summary
 
 1. **Engineer** implements the requested changes
-2. **Code Reviewer** automatically reviews for critical issues only
-3. **Engineer** mandatorily fixes all critical issues found
+2. **Code Reviewer** performs comprehensive review for all code quality aspects
+3. **Engineer** addresses feedback based on priority (Critical → Important → Suggested)
 4. Report completion with summary
 
-This ensures all code changes undergo review and critical issues are always addressed before completion.
+This ensures all code changes undergo comprehensive review with feedback addressed by priority before completion.
