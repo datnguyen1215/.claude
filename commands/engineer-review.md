@@ -16,6 +16,18 @@ Before starting ANY engineering task, you MUST:
 3. Apply these rules throughout your implementation
 4. **MANDATORY - NO EXCEPTIONS**: When using Read tool, ALWAYS read complete files. NEVER use limit or offset parameters. Full file reading is REQUIRED.
 
+## Step 0: Create Engineering Plan
+
+Analyze the requirements and create a detailed implementation plan.
+
+Based on $ARGUMENTS, generate a specific plan including:
+- Files to modify or create
+- Functions/methods to implement
+- Key implementation steps
+- Testing approach if applicable
+
+Store this plan for use in all subsequent steps.
+
 ## Step 1: Engineer Implementation
 
 First, spawn the engineer agent to implement the requested changes.
@@ -23,7 +35,7 @@ First, spawn the engineer agent to implement the requested changes.
 Use the Task tool with:
 - subagent_type: "engineer"
 - description: "Implement requirements"
-- prompt: "Implement the following requirements: $ARGUMENTS. At the end of your work, list all files you modified with their full paths."
+- prompt: "Implementation Plan:\n[generated plan from Step 0]\n\nOriginal Requirements: $ARGUMENTS\n\nFollow the plan above to implement these requirements. At the end of your work, list all files you modified with their full paths."
 
 Capture the output to identify which files were modified.
 
@@ -34,7 +46,7 @@ After the engineer completes, identify the modified files from the engineer's ou
 Use the Task tool with:
 - subagent_type: "code-reviewer"
 - description: "Comprehensive code review"
-- prompt: "Review these recently modified files: [list files from Step 1]. Provide comprehensive feedback including: bugs, security issues, broken functionality, code cleanliness, maintainability concerns, performance considerations, readability improvements, and best practices. Return a numbered list with specific file:line references, categorized by severity (Critical/Important/Suggested)."
+- prompt: "Context - Original Requirements: $ARGUMENTS\n\nImplementation Plan Used:\n[generated plan from Step 0]\n\nREVIEW ONLY these modified files (DO NOT review other files): [list files from Step 1]. Provide comprehensive feedback including: bugs, security issues, broken functionality, code cleanliness, maintainability concerns, performance considerations, readability improvements, and best practices. Return a numbered list with specific file:line references, categorized by severity (Critical/Important/Suggested)."
 
 Parse the reviewer's output to extract all feedback organized by severity.
 
@@ -45,7 +57,7 @@ Apply the feedback from code review based on priority.
 Use the Task tool with:
 - subagent_type: "engineer"
 - description: "Address review feedback"
-- prompt: "Address the following issues from code review: [list all issues from Step 2, organized by severity]. Start with Critical issues (must fix), then Important issues (should fix), and finally Suggested improvements (nice to have). Make minimal changes to address each issue. For each change, specify the file:line and confirm what was addressed."
+- prompt: "Context - Implementation Plan:\n[generated plan from Step 0]\n\nAddress these code review issues in the modified files: [list all issues from Step 2, organized by severity]. Start with Critical issues (must fix), then Important issues (should fix), and finally Suggested improvements (nice to have). Make minimal changes to address each issue. For each change, specify the file:line and confirm what was addressed."
 
 If no issues were found, skip this step and report successful completion.
 
@@ -59,6 +71,7 @@ After all three steps:
 
 ## Workflow Summary
 
+0. Generate detailed engineering plan from requirements
 1. **Engineer** implements the requested changes
 2. **Code Reviewer** performs comprehensive review for all code quality aspects
 3. **Engineer** addresses feedback based on priority (Critical → Important → Suggested)
