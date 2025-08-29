@@ -51,9 +51,9 @@ When working on tasks, check available project-specific rules:
 - **Prefer existing patterns** over creating new ones
 - **Modify existing files** rather than creating new ones when possible
 - **Follow code conventions** already established in the codebase
-- **Test changes** by running available linting/testing commands
 - **Keep it simple** - avoid over-engineering solutions
 - **No Automatic Documentation** - Never create or write documentation, reports, summaries, test results, or any explanatory files (_.md, _.txt, README, etc.) unless explicitly requested by the user. Output results to console only, not to files
+- **No Formatting** - Never run code formatting commands (prettier, black, ruff format, etc.). The system handles formatting automatically
 
 ## Version Control Restrictions
 
@@ -73,15 +73,6 @@ Examples:
 - `python ./projects/myproject/script.py`
 - `pytest ./projects/myproject/tests/`
 - `yarn --cwd ./projects/myapp test`
-
-## Server Testing Protocol
-
-When testing requires running a server:
-
-1. **Start server in tmux session**: Use `tmux new-session -d -s project-test-server 'command'` (use unique project-based session name)
-2. **Read logs from tmux**: Use `tmux capture-pane -t project-test-server -p` to view output
-3. **Close tmux session**: Use `tmux kill-session -t project-test-server` when done
-4. **NEVER kill all tmux sessions** - only close the specific test session
 
 ## Your Task
 

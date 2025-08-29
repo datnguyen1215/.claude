@@ -85,14 +85,14 @@ case "$EXTENSION" in
     js|jsx|ts|tsx|mjs|cjs)
         # Try prettier first
         if PRETTIER=$(find_project_formatter "$FILE_DIR" "prettier"); then
-            "$PRETTIER" --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && "$PRETTIER" --write "$FILE_PATH") 2>/dev/null
         elif command_exists prettier; then
-            prettier --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && prettier --write "$FILE_PATH") 2>/dev/null
         # Try eslint as fallback
         elif ESLINT=$(find_project_formatter "$FILE_DIR" "eslint"); then
-            "$ESLINT" --fix "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && "$ESLINT" --fix "$FILE_PATH") 2>/dev/null
         elif command_exists eslint; then
-            eslint --fix "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && eslint --fix "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
@@ -101,34 +101,34 @@ case "$EXTENSION" in
         # Prettier with svelte plugin
         if PRETTIER=$(find_project_formatter "$FILE_DIR" "prettier"); then
             echo "[$(date)] Running: $PRETTIER --write $FILE_PATH" >> /tmp/claude-hook.log
-            "$PRETTIER" --write "$FILE_PATH" 2>>/tmp/claude-hook.log
+            (cd "$FILE_DIR" && "$PRETTIER" --write "$FILE_PATH") 2>>/tmp/claude-hook.log
             echo "[$(date)] Prettier exit code: $?" >> /tmp/claude-hook.log
         elif command_exists prettier; then
             echo "[$(date)] Running global prettier" >> /tmp/claude-hook.log
-            prettier --write "$FILE_PATH" 2>>/tmp/claude-hook.log
+            (cd "$FILE_DIR" && prettier --write "$FILE_PATH") 2>>/tmp/claude-hook.log
         fi
         ;;
 
     json)
         # Format JSON files with prettier
         if PRETTIER=$(find_project_formatter "$FILE_DIR" "prettier"); then
-            "$PRETTIER" --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && "$PRETTIER" --write "$FILE_PATH") 2>/dev/null
         elif command_exists prettier; then
-            prettier --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && prettier --write "$FILE_PATH") 2>/dev/null
         elif command_exists jq; then
             # Use jq as fallback for JSON
-            jq . "$FILE_PATH" > "$FILE_PATH.tmp" && mv "$FILE_PATH.tmp" "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && jq . "$FILE_PATH" > "$FILE_PATH.tmp" && mv "$FILE_PATH.tmp" "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
     py)
         # Python formatting
         if command_exists black; then
-            black "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && black "$FILE_PATH") 2>/dev/null
         elif command_exists ruff; then
-            ruff format "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && ruff format "$FILE_PATH") 2>/dev/null
         elif command_exists autopep8; then
-            autopep8 --in-place "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && autopep8 --in-place "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
@@ -136,64 +136,64 @@ case "$EXTENSION" in
         # C# formatting
         if command_exists dotnet; then
             # Try to format the specific file
-            dotnet format whitespace "$FILE_PATH" --include "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && dotnet format whitespace "$FILE_PATH" --include "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
     sh|bash)
         # Shell script formatting
         if command_exists shfmt; then
-            shfmt -w "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && shfmt -w "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
     go)
         # Go formatting
         if command_exists gofmt; then
-            gofmt -w "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && gofmt -w "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
     rs)
         # Rust formatting
         if command_exists rustfmt; then
-            rustfmt "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && rustfmt "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
     css|scss|sass|less)
         # CSS formatting
         if PRETTIER=$(find_project_formatter "$FILE_DIR" "prettier"); then
-            "$PRETTIER" --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && "$PRETTIER" --write "$FILE_PATH") 2>/dev/null
         elif command_exists prettier; then
-            prettier --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && prettier --write "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
     html|htm)
         # HTML formatting
         if PRETTIER=$(find_project_formatter "$FILE_DIR" "prettier"); then
-            "$PRETTIER" --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && "$PRETTIER" --write "$FILE_PATH") 2>/dev/null
         elif command_exists prettier; then
-            prettier --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && prettier --write "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
     md|markdown)
         # Markdown formatting
         if PRETTIER=$(find_project_formatter "$FILE_DIR" "prettier"); then
-            "$PRETTIER" --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && "$PRETTIER" --write "$FILE_PATH") 2>/dev/null
         elif command_exists prettier; then
-            prettier --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && prettier --write "$FILE_PATH") 2>/dev/null
         fi
         ;;
 
     yaml|yml)
         # YAML formatting
         if PRETTIER=$(find_project_formatter "$FILE_DIR" "prettier"); then
-            "$PRETTIER" --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && "$PRETTIER" --write "$FILE_PATH") 2>/dev/null
         elif command_exists prettier; then
-            prettier --write "$FILE_PATH" 2>/dev/null
+            (cd "$FILE_DIR" && prettier --write "$FILE_PATH") 2>/dev/null
         fi
         ;;
 esac
