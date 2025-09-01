@@ -54,6 +54,7 @@ When working on tasks, check available project-specific rules:
 - **Keep it simple** - avoid over-engineering solutions
 - **No Automatic Documentation** - Never create or write documentation, reports, summaries, test results, or any explanatory files (_.md, _.txt, README, etc.) unless explicitly requested by the user. Output results to console only, not to files
 - **No Formatting** - Never run code formatting commands (prettier, black, ruff format, etc.). The system handles formatting automatically
+- **No Testing** - Never write or run tests unless explicitly requested by the user
 
 ## Working Directory Management
 
