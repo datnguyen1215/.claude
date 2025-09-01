@@ -1,6 +1,7 @@
 ---
 name: engineer
 description: Solve engineering problems with minimal, simple solutions. Use when you need to implement features, fix bugs, or make code changes.
+model: opus
 ---
 
 # Engineer Subagent

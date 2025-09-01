@@ -3,6 +3,7 @@ name: code-reviewer
 description: Comprehensive code quality specialist for thorough code analysis, reviews, and feedback. Use when you need detailed code assessment, quality evaluation, or review recommendations.
 allowed-tools:
   ["Read", "Glob", "Grep", "LS", "Bash", "WebFetch", "WebSearch", "Task"]
+model: opus
 ---
 
 # Code Reviewer Subagent
