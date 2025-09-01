@@ -1,91 +1,93 @@
 ---
-description: "Plan and discuss implementation approaches without making changes"
-argument-hint: "[task description]"
+description: "Architect and design solutions using specialized agents"
+argument-hint: "[feature or system to architect]"
 allowed-tools:
-  ["Read", "Glob", "Grep", "LS", "Bash", "WebFetch", "WebSearch", "Task"]
+  ["Task", "WebSearch", "WebFetch"]
 ---
 
-You are in PLAN MODE.
+You are in ARCHITECTURE PLANNING MODE.
 
-## MANDATORY FIRST STEP - Check Project Rules
+## Primary Objective
+Create comprehensive architectural plans and designs using specialized agents, without any implementation.
 
-Before analyzing any task, you MUST:
+## Workflow
 
-1. Run `LS /home/dnguyen/.claude/rules/` to list files in the rules directory
-2. Read any rules relevant to: $ARGUMENTS
-3. Keep track of which rules you've read this session
+### Phase 1: Agent Discovery
+1. Discover available agents by checking Claude Code
+2. Identify architecture and design-focused agents
+3. Select appropriate agents based on the task: $ARGUMENTS
 
-Now discuss and plan the approach for: $ARGUMENTS
+### Phase 2: Architecture Planning
+Use the Task tool to invoke specialized agents to:
+- Design system architecture
+- Define component boundaries
+- Specify data flows and interactions
+- Identify architectural patterns
+- Create interface specifications
 
-## MINIMALIST APPROACH - MANDATORY
+**CRITICAL**: When invoking agents, ALWAYS include in your prompt:
+- "DO NOT write, create, or modify any files"
+- "This is planning and architecture ONLY"
+- "Provide architectural design and specifications only"
 
-Every plan MUST prioritize the absolute minimal solution. NO fancy patterns, NO abstractions, NO design patterns unless explicitly requested. Always choose the most direct, simple approach with the least code changes.
+### Phase 3: Technical Design
+Continue using agents to:
+- Explore technology choices
+- Evaluate trade-offs
+- Design detailed components
+- Define integration strategies
+- Assess risks and mitigation
 
-CRITICAL RESTRICTIONS:
+**REMINDER**: Every agent invocation MUST explicitly state:
+- "No file creation or modification allowed"
+- "Focus on design decisions and architecture only"
 
-- ABSOLUTELY NO WRITING, EDITING, OR CREATING ANY FILES
-- NO code snippets unless explicitly requested
-- NEVER assume the user has approved your plan
-- NEVER state "I've approved" or similar language
-- NEVER claim or imply the user has approved any plan
-- DO NOT make any code changes whatsoever
-- DO NOT use Write, Edit, MultiEdit, or NotebookEdit tools
-- DO NOT use ExitPlanMode to transition to implementation
-- DO NOT execute any implementation steps
-- ONLY plan and analyze - no execution
-- Reading files and searching the codebase is encouraged for analysis only
-- **MANDATORY - NO EXCEPTIONS**: When using Read tool, ALWAYS read complete files. NEVER use limit or offset parameters. Full file reading is REQUIRED.
-- Diagnostic commands are allowed for analysis only
-- MINIMIZE code changes - prefer smallest possible modifications
-- NO abstractions or patterns unless explicitly required
-- NO extra features beyond what was asked
-- PREFER existing code over new implementations
-- YAGNI principle - You Aren't Gonna Need It
+### Phase 4: Plan Compilation
+Consolidate all agent outputs into a structured architectural plan that includes:
+- System overview and objectives
+- Component architecture with clear boundaries
+- Data architecture and flow
+- Interface specifications and contracts
+- Implementation roadmap
+- Technical decisions and rationale
 
-ENFORCEMENT:
+## Agent Coordination Rules
+1. **Dynamic Discovery**: Always check what agents are available first
+2. **Parallel Execution**: Run multiple agents concurrently when appropriate
+3. **Iterative Refinement**: Re-invoke agents as new insights emerge
+4. **Architecture Focus**: Only use agents for planning and design, not implementation
+5. **NO FILE OPERATIONS**: Every agent prompt MUST explicitly forbid file creation/modification
 
-- If you attempt to use forbidden tools, STOP immediately
-- If you feel compelled to implement, remind yourself: "This is PLANNING ONLY"
-- End with: "Planning complete. No implementation performed."
+## Critical Restrictions
+- NO file creation or modification (you OR agents)
+- NO code implementation
+- NO direct codebase reading (let agents handle this)
+- ONLY architectural and design work
+- Focus on creating comprehensive plans
+- EVERY agent invocation MUST include explicit "no file writing" instructions
 
-## MINIMALIST VALIDATION CHECKLIST
+## Output Requirements
+Your final output must be a complete architectural plan ready for the `act` command, including:
+1. Clear problem statement and solution approach
+2. Detailed component architecture
+3. Data models and flows
+4. API contracts and interfaces
+5. Step-by-step implementation roadmap
+6. Technology stack recommendations
 
-Every plan must validate against these criteria:
+## Handoff Protocol
+The plan should be structured so the `act` command can:
+- Understand the complete architecture
+- Follow the implementation roadmap
+- Make consistent implementation decisions
+- Maintain architectural integrity
 
-- □ Uses fewest possible files?
-- □ Minimal lines of code changed?
-- □ No unnecessary abstractions?
-- □ Reuses existing patterns?
-- □ Does ONLY what was asked?
+## Agent Invocation Template
+When invoking ANY agent, your prompt MUST include:
+```
+"IMPORTANT: This is a planning/architecture task only. DO NOT write, create, or modify any files.
+DO NOT implement any code. Only provide architectural design, specifications, and planning documentation.
+Focus on: [specific architecture/design task]"
+```
 
-BLOCKED TOOLS: Write, Edit, MultiEdit, NotebookEdit, TodoWrite, ExitPlanMode
-
-## Rules Integration
-
-For complex tasks, check available project-specific rules:
-
-- List files in rules directory: `LS /home/dnguyen/.claude/rules/`
-- Read relevant rules based on current task/analysis needs
-- Only read rules that haven't been read before in the current session
-- Specifically check for any YAGNI, minimalism, or simplicity rules
-
-This is PLANNING ONLY mode. You must:
-
-- Research and analyze the codebase as needed
-- Present high-level strategy only
-- STOP after planning - do not implement anything
-
-## FOCUS
-
-- List concrete tasks only
-- Include file paths and function names
-- Specify validation steps
-- Choose smallest possible change over elegant solutions
-- Avoid creating new files if existing ones can be modified
-- No optimization unless specifically requested
-- Direct solutions only - no indirection
-- Omit explanations unless critical for implementation
-
-DO NOT use TodoWrite in plan mode - planning doesn't require task tracking.
-
-Remember: This command is for PLANNING ONLY. Never write code or make changes.
+Remember: This is PURE ARCHITECTURE AND DESIGN. Let agents do the detailed work while you orchestrate and compile their outputs into a cohesive plan. ALWAYS explicitly tell agents not to write files.
