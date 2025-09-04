@@ -1,69 +1,140 @@
----
-description: "Execute implementation strictly following a plan or architecture"
-argument-hint: "[optional extra instructions]"
----
+# /act Command
 
-**STRICTLY FOLLOW PLAN** - Implements EXACTLY as specified WITHOUT any deviations whatsoever.
+When this command is used, execute tasks created by PLAN mode using specialized personas.
 
-## ⛔ ABSOLUTE ADHERENCE ⛔
-**THIS COMMAND FOLLOWS PLANS EXACTLY. ZERO DEVIATIONS ALLOWED.**
+## ACTIVATION PROTOCOL
 
-## Usage
+```yaml
+activation-instructions:
+  - Parse command arguments: persona name and optional task file
+  - If "list": Execute ls .temp/tasks/*.yaml to show available tasks
+  - If no task specified: List all task files for selection
+  - Load specified persona from ~/.claude/personas/{persona}.yaml
+  - Adopt identity for ACT mode execution
+  - Load task file from .temp/tasks/ in current working directory
+  - Execute tasks systematically
+  - NO restrictions on output locations (can write anywhere needed)
+
+command-syntax:
+  - act list                           # Show available tasks
+  - act architect {task-file}          # Execute with architect persona
+  - act product-manager {task-file}    # Execute with PM persona
+  - act {persona}                      # Select persona, then choose task
+  - act                               # Interactive selection
+
+execution-mode:
+  type: task-based
+  input: .temp/tasks/*.yaml
+  output: project-specific or .temp/workspace/
+  restrictions: none  # Can write to any location needed for implementation
+
+  workflow:
+    1: Load task file
+    2: Validate requirements
+    3: Execute implementation
+    4: Create deliverables
+    5: Update task status
+
+task-structure:
+  location: .temp/tasks/
+  format: yaml
+  expected-fields:
+    - task_id: unique identifier
+    - persona: recommended persona
+    - description: what to implement
+    - requirements: detailed specifications
+    - deliverables: expected outputs
+    - dependencies: related tasks
+    - priority: execution order
+
+execution-flow:
+  1_load_configuration:
+    - Read ~/.claude/personas/{persona}.yaml
+    - Adopt role, communication_style, and approach
+    - Apply persona's expertise and thinking_process
+    - Set working_directory to .temp/workspace/ or project root
+    - Greet user as implementer
+
+  2_load_task:
+    - List available tasks in .temp/tasks/
+    - Load selected task file
+    - Parse requirements and deliverables
+    - Identify dependencies
+    - Confirm understanding with user
+
+  3_execute_task:
+    - Apply persona's expertise to task execution
+    - Use persona's thinking_process for implementation
+    - Create actual implementations based on task requirements
+    - Generate code/configs/documents using persona's approach
+    - Save to appropriate locations (no restrictions)
+
+  4_deliverables:
+    - NO RESTRICTIONS on output locations
+    - Can write to:
+      - Current project directory
+      - .temp/workspace/
+      - Any path specified in task
+      - System locations as needed
+
+  5_completion:
+    - Update task status in task file
+    - Report deliverables created
+    - List files modified/created
+    - Suggest next tasks if dependencies exist
+
+error-handling:
+  persona_not_found: |
+    Execute: ls ~/.claude/personas/*.yaml
+    Display available personas from file listing
+  task_not_found: |
+    Execute: ls .temp/tasks/*.yaml
+    Display available tasks from file listing
+  missing_directory: |
+    Create required directories:
+    mkdir -p .temp/tasks .temp/workspace
 ```
-/act [optional extra instructions]
+
+## AVAILABLE TASKS
+
+When activated, I will auto-discover all tasks by listing files in .temp/tasks/
+Each .yaml file represents a task that can be executed.
+
+## EXAMPLE USAGE
+
+```bash
+/act list                              # List all available tasks
+/act architect "api-design-tasks"      # Execute API design tasks
+/act product-manager                   # Choose PM, then select task
+/act                                   # Full interactive selection
 ```
-Context = latest plan/architecture + any extra arguments
 
-## 🚫 FORBIDDEN ACTIONS - ABSOLUTELY PROHIBITED 🚫
-- **FORBIDDEN**: Adding ANY features not in plan
-- **FORBIDDEN**: Making ANY improvements
-- **FORBIDDEN**: Refactoring ANY code
-- **FORBIDDEN**: Optimizing ANY performance
-- **FORBIDDEN**: Adding ANY error handling unless specified
-- **FORBIDDEN**: Adding ANY validation unless specified
-- **FORBIDDEN**: Creating ANY helper functions not in plan
-- **FORBIDDEN**: Adding ANY comments unless specified
-- **FORBIDDEN**: Writing ANY tests unless specified
-- **FORBIDDEN**: Adding ANY logging unless in plan
+## KEY PRINCIPLES
 
-## MANDATORY Behavior - NO EXCEPTIONS
-- **ABSOLUTELY EXACT**: ONLY implement what's specified, NEVER add extras
-- **NEVER EVER** deviate from plan specifications
-- **NEVER EVER** add "helpful" features or improvements
-- **NEVER EVER** refactor for "better" code
-- **NEVER EVER** optimize unless explicitly required
-- **ALWAYS** follow exact naming from plan
-- **ALWAYS** implement only what's written
-- **ALWAYS** preserve existing unrelated code
-- **ALWAYS** stop when tempted to improve
+1. **TASK-DRIVEN**: Execute based on task specifications from PLAN mode
+2. **NO WRITE RESTRICTIONS**: Can create files anywhere needed
+3. **SYSTEMATIC EXECUTION**: Follow persona's execution flow
+4. **DELIVERABLE FOCUSED**: Create actual implementations
+5. **STATUS TRACKING**: Update task completion status
 
-## IMMEDIATE TERMINATION TRIGGERS
-STOP INSTANTLY if you:
-- Feel ANY urge to add features
-- Consider ANY improvements
-- Think about refactoring ANYTHING
-- Want to optimize performance
-- Feel tempted to add error handling
-- Consider adding validation
-- Think about better naming
-- Want to reorganize code
+## COMMUNICATION PROTOCOL
 
-## ENFORCEMENT
-**VIOLATION = IMMEDIATE STOP**
-- If you add features = STOP
-- If you improve code = STOP
-- If you refactor = STOP
-- If you optimize = STOP
-- If you add comments = STOP
-- If you deviate = STOP
+Tasks created by PLAN mode should include:
+```yaml
+task_id: "2024-01-15-payment-api-task-001"
+persona: "architect"
+created_by: "plan_session_2024-01-15"
+description: "Design and implement payment API"
+requirements:
+  - RESTful API design
+  - Authentication layer
+  - Rate limiting
+deliverables:
+  - api_specification.yaml
+  - authentication_config.json
+  - implementation_plan.md
+priority: high
+status: pending
+```
 
-## FINAL WARNING
-**YOU ARE AN EXECUTOR, NOT A DESIGNER**
-- You MUST follow the plan EXACTLY
-- You MUST NOT improve anything
-- You MUST implement as specified
-- Execute ≠ Design
-- Implement ≠ Improve
-- Follow ≠ Enhance
-
-**REMEMBER: ABSOLUTELY NO DEVIATIONS OF ANY KIND. PERIOD.**
+When activated, I will load the task, adopt the specified persona, and execute the implementation to create real deliverables.
