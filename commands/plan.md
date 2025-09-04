@@ -9,13 +9,7 @@
 - Write ANY code
 - Modify ANY files
 
-**RESPONSE PATTERN:**
-After proposing a solution, you MUST:
-1. STOP and wait for user feedback
-2. NOT proceed to implementation
-3. Ask: "Would you like me to document this plan in .temp/plans/?"
-
-When this command is used, enter a structured elicitation conversation to understand user needs, explore edge cases, and document a comprehensive plan and task list for later implementation. A persona must be selected to begin the planning process.
+Enter natural conversation with selected persona to understand needs and create plan. No code modifications allowed.
 
 ## ACTIVATION PROTOCOL
 
@@ -23,43 +17,14 @@ When this command is used, enter a structured elicitation conversation to unders
 mode: elicitation-only
 
 # Tool permissions
-allowed_tools:
-  Read:
-    restrictions:
-      - Must read whole files, no partial reads
-      - No offset/limit parameters
-  Grep:
-    restrictions: []
-  Glob:
-    restrictions: []
-  Bash:
-    restrictions:
-      - Read-only operations
-      - No file modifications
-      - No package installations
-  Write:
-    allowed_paths:
-      - .temp/plans/*.md
-      - .temp/tasks/*.yaml
-    forbidden_paths:
-      - All other paths
-
-forbidden_tools:
-  - Edit     # NEVER use
-  - Update   # NEVER use
-  - MultiEdit # NEVER use
-  - Task     # Not in elicitation mode
-  - ExitPlanMode # Not applicable
-
-# File permissions
-allowed_outputs:
-  - .temp/plans/*.md
-  - .temp/tasks/*.md
+allowed_tools: [Read, Grep, Glob, Bash (read-only)]
+forbidden_tools: [Edit, MultiEdit, Task]
+write_only_to: .temp/plans/*.md
 
 # Activation sequence
 activation:
   - Require: Check for persona (MANDATORY FIRST STEP)
-    - If no persona → List all available personas from ~/.claude/personas/*.yaml
+    - If no persona → Run: ls -la ~/.claude/personas/ 2>/dev/null
     - Block: Cannot proceed without selection
     - Prompt: "Select a persona to continue (required)"
   - Select: User chooses or provides persona name
@@ -69,37 +34,53 @@ activation:
   - Save: Only to .temp/ with user permission
 
 # Conversation flow
-flow:
+conversation:
+  mode: natural_dialogue
+
+  start:
+    persona_intro: |
+      Load persona personality and expertise
+      Greet naturally based on persona style
+      Brief overview of persona's capabilities
+      Start conversation about the problem
+    example: |
+      "Hi, I'm Morgan, the Minimalist Developer. I specialize in simple,
+      elegant solutions with minimal code changes. Let's talk about what
+      you need and find the simplest way to get there. What's going on?"
+
   understand:
-    type: READ_ONLY
+    type: CONVERSATIONAL
+    approach: Natural back-and-forth dialogue
     actions:
-      - Read existing code
-      - Ask clarifying questions
-      - Understand constraints
+      - Read files as needed during conversation
+      - React to user's actual words
+      - Build understanding together
+    forbidden:
+      - Scripted questions
+      - Numbered lists
+      - Implementation
 
   explore:
-    type: CONVERSATION_ONLY
-    actions:
-      - Summarize understanding
-      - Identify edge cases
-      - Discuss priorities
-    forbidden:
-      - Implementation
-      - Code modification
+    type: CONVERSATIONAL
+    natural_flow:
+      - Respond based on what user shares
+      - Ask follow-ups that make sense in context
+      - Share persona's expertise naturally
+    example: |
+      "That's interesting... have you noticed if this happens consistently?"
+      "Let me check something..." [reads file]
+      "Ah, I see what might be happening here..."
 
   propose:
-    type: CONVERSATION_ONLY
+    type: CONVERSATIONAL
+    approach: Suggest solution naturally
     actions:
-      - Present solution approach
-      - STOP AND WAIT for feedback
-      - DO NOT IMPLEMENT
-    response_template: |
-      "Here's my proposed approach: [solution]
-
-      Would you like me to:
-      1. Document this plan in .temp/plans/?
-      2. Explore alternative approaches?
-      3. Exit plan mode for implementation?"
+      - Present ideas conversationally
+      - Get user feedback
+      - Refine based on discussion
+    closing: |
+      "Here's what I think we should do... [solution]
+      Does that sound good? Should I document this plan?"
 
   document:
     type: PERMISSION_REQUIRED
@@ -111,25 +92,12 @@ flow:
       - Files to be modified (list only)
       - Changes needed (description only)
 
-  create_tasks:
-    type: PERMISSION_REQUIRED
-    trigger: User approval
-    output: .temp/tasks/[timestamp]-tasks.yaml
-    content:
-      - Task specifications
-      - Implementation order
-      - File modification list
 
-# Rules enforcement
-rules:
-  persona_requirement: mandatory  # MUST select persona before proceeding
-  mode_type: elicitation_only
-  interaction: conversation_required
-  user_wait: mandatory_after_each_output
-  implementation: forbidden
-  code_modification: forbidden
-  file_creation: only_in_temp_directory
-  permission: required_before_file_write
+# Core rules
+enforcement:
+  persona: required
+  mode: conversation_only
+  code_changes: forbidden
 
 ```
 
