@@ -8,7 +8,13 @@ When this command is used, execute tasks created by PLAN mode using specialized 
 activation-instructions:
   - Parse command arguments: persona name and optional task file
   - If "list": Execute ls .temp/tasks/*.yaml to show available tasks
+  - If "auto": Dynamically analyze all personas for best match
   - If no task specified: List all task files for selection
+  - Dynamically discover all personas from ~/.claude/personas/
+  - If task specifies persona: Use that persona
+  - Otherwise: Analyze task content against all available personas
+  - Read each persona's expertise and match to task requirements
+  - Score and rank personas by relevance
   - Load specified persona from ~/.claude/personas/{persona}.yaml
   - Adopt identity for ACT mode execution
   - Load task file from .temp/tasks/ in current working directory
@@ -17,8 +23,10 @@ activation-instructions:
 
 command-syntax:
   - act list                           # Show available tasks
+  - act auto {task-file}               # Auto-select best persona for task
   - act architect {task-file}          # Execute with architect persona
   - act product-manager {task-file}    # Execute with PM persona
+  - act {task-file}                    # Load task, auto-select persona
   - act {persona}                      # Select persona, then choose task
   - act                               # Interactive selection
 
@@ -48,12 +56,23 @@ task-structure:
     - priority: execution order
 
 execution-flow:
-  1_load_configuration:
+  1_select_and_load:
+    - If task file provided:
+      - Load task file and check for 'persona' field
+      - If no persona specified or "auto":
+        - Execute ls ~/.claude/personas/*.yaml to find all personas
+        - For each persona file:
+          - Read persona YAML and extract expertise fields
+          - Analyze task description and requirements
+          - Score persona relevance to task keywords
+        - Rank personas by match score
+        - Select highest scoring persona
+        - Explain: "Selected [persona] because task involves [matched areas]"
     - Read ~/.claude/personas/{persona}.yaml
     - Adopt role, communication_style, and approach
     - Apply persona's expertise and thinking_process
     - Set working_directory to .temp/workspace/ or project root
-    - Greet user as implementer
+    - Greet user as implementer with task understanding
 
   2_load_task:
     - List available tasks in .temp/tasks/
@@ -72,10 +91,14 @@ execution-flow:
   4_deliverables:
     - NO RESTRICTIONS on output locations
     - Can write to:
-      - Current project directory
-      - .temp/workspace/
+      - Current project directory (modify existing code)
+      - Source code files (src/, lib/, etc.)
+      - Configuration files
+      - Documentation files
+      - Test files
       - Any path specified in task
       - System locations as needed
+    - Full permission to modify existing codebase
 
   5_completion:
     - Update task status in task file
@@ -93,6 +116,9 @@ error-handling:
   missing_directory: |
     Create required directories:
     mkdir -p .temp/tasks .temp/workspace
+  no_personas_found: |
+    Check ~/.claude/personas/ directory exists
+    Suggest creating personas if directory is empty
 ```
 
 ## AVAILABLE TASKS
@@ -100,11 +126,23 @@ error-handling:
 When activated, I will auto-discover all tasks by listing files in .temp/tasks/
 Each .yaml file represents a task that can be executed.
 
+## INTELLIGENT PERSONA SELECTION
+
+The system dynamically discovers and selects personas:
+- Scans ~/.claude/personas/ for all available personas
+- Reads each persona's expertise and capabilities
+- Matches task requirements to persona strengths
+- Tasks from PLAN mode may include recommended persona
+- Can override with explicit persona choice
+- Works with any personas added to the directory
+
 ## EXAMPLE USAGE
 
 ```bash
 /act list                              # List all available tasks
-/act architect "api-design-tasks"      # Execute API design tasks
+/act auto "api-design-tasks.yaml"      # Auto-select best persona
+/act "payment-api-tasks.yaml"          # Load task, suggest persona
+/act architect "api-design-tasks"      # Explicitly use architect
 /act product-manager                   # Choose PM, then select task
 /act                                   # Full interactive selection
 ```
@@ -122,7 +160,7 @@ Each .yaml file represents a task that can be executed.
 Tasks created by PLAN mode should include:
 ```yaml
 task_id: "2024-01-15-payment-api-task-001"
-persona: "architect"
+persona: "architect"  # Can be "auto" for automatic selection
 created_by: "plan_session_2024-01-15"
 description: "Design and implement payment API"
 requirements:
@@ -135,6 +173,11 @@ deliverables:
   - implementation_plan.md
 priority: high
 status: pending
+
+# If persona is "auto" or not specified, ACT mode will:
+# 1. Analyze description and requirements
+# 2. Match keywords to persona expertise
+# 3. Select best persona automatically
 ```
 
 When activated, I will load the task, adopt the specified persona, and execute the implementation to create real deliverables.
