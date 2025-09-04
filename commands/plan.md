@@ -1,180 +1,153 @@
 # /plan Command
 
-When this command is used, initiate an interactive planning session with specialized personas.
+**🚨 ELICITATION MODE ONLY - NEVER MODIFY CODE 🚨**
+
+## CRITICAL ENFORCEMENT RULES
+**STOP IMMEDIATELY if you're about to:**
+- Use Edit, MultiEdit, or Write tools (except .temp/)
+- Implement ANY solution
+- Write ANY code
+- Modify ANY files
+
+**RESPONSE PATTERN:**
+After proposing a solution, you MUST:
+1. STOP and wait for user feedback
+2. NOT proceed to implementation
+3. Ask: "Would you like me to document this plan in .temp/plans/?"
+
+When this command is used, enter a structured elicitation conversation to understand user needs, explore edge cases, and document a comprehensive plan and task list for later implementation. A persona must be selected to begin the planning process.
 
 ## ACTIVATION PROTOCOL
 
 ```yaml
-activation-instructions:
-  - Parse command arguments: persona name and optional topic
-  - If "list": Execute ls ~/.claude/personas/*.yaml to show available personas
-  - If "auto": Dynamically analyze all personas and select best match
-  - If no persona specified: Analyze topic or ask for details, then suggest personas
-  - Dynamically load and analyze all personas from ~/.claude/personas/
-  - Read each persona's expertise fields and match to topic keywords
-  - Score each persona based on keyword matches in their expertise
-  - Recommend best matching persona(s) with reasoning
-  - Load specified persona YAML from ~/.claude/personas/{persona}.yaml
-  - Adopt persona characteristics (role, style, expertise, methodology)
-  - Enter MANDATORY INTERACTIVE MODE - no skipping allowed
-  - Execute persona's planning_methodology steps sequentially
-  - HALT after each section for user input (dynamic context-aware)
-  - Save progress to .temp/ in current working directory
+mode: elicitation-only
 
-command-syntax:
-  - plan list                       # Show available personas
-  - plan auto "topic"               # Auto-select best persona for topic
-  - plan architect "topic"          # Start with architect persona
-  - plan product-manager "topic"    # Start with PM persona
-  - plan ux-designer "topic"        # Start with UX persona
-  - plan security-expert "topic"    # Start with security persona
-  - plan "topic"                    # Analyze topic and suggest persona
-  - plan                           # Interactive persona selection
+# Tool permissions
+allowed_tools:
+  Read:
+    restrictions:
+      - Must read whole files, no partial reads
+      - No offset/limit parameters
+  Grep:
+    restrictions: []
+  Glob:
+    restrictions: []
+  Bash:
+    restrictions:
+      - Read-only operations
+      - No file modifications
+      - No package installations
+  Write:
+    allowed_paths:
+      - .temp/plans/*.md
+      - .temp/tasks/*.yaml
+    forbidden_paths:
+      - All other paths
 
-interaction-mode:
-  mandatory: true
-  dynamic: true
-  user-input: required_at_each_stage
-  skip-allowed: false
+forbidden_tools:
+  - Edit     # NEVER use
+  - Update   # NEVER use
+  - MultiEdit # NEVER use
+  - Task     # Not in elicitation mode
+  - ExitPlanMode # Not applicable
 
-  dynamic-options:
-    - Generate contextual options based on current state
-    - If information is incomplete: Ask specific clarifying questions
-    - If multiple paths exist: Present relevant choices
-    - If assumptions needed: Confirm with user first
-    - Always include: "Tell me more about..." option
-    - Adapt options to persona's expertise and approach
+# File permissions
+allowed_outputs:
+  - .temp/plans/*.md
+  - .temp/tasks/*.md
 
-  example-interactions:
-    clarification: |
-      "I need more information about [specific aspect].
-      1. [Specific question related to gap]
-      2. [Alternative approach]
-      3. [Related consideration]
-      Or describe what you have in mind:"
+# Activation sequence
+activation:
+  - Require: Check for persona (MANDATORY FIRST STEP)
+    - If no persona → List all available personas from ~/.claude/personas/*.yaml
+    - Block: Cannot proceed without selection
+    - Prompt: "Select a persona to continue (required)"
+  - Select: User chooses or provides persona name
+  - Validate: Ensure persona exists in ~/.claude/personas/
+  - Load: Selected persona from ~/.claude/personas/{persona}.yaml
+  - Mode: Enter ELICITATION conversation with loaded persona
+  - Save: Only to .temp/ with user permission
 
-    exploration: |
-      "Based on what you've told me, we could:
-      1. [Persona-specific option A]
-      2. [Persona-specific option B]
-      3. [Explore different angle]
-      What would you like to focus on?"
+# Conversation flow
+flow:
+  understand:
+    type: READ_ONLY
+    actions:
+      - Read existing code
+      - Ask clarifying questions
+      - Understand constraints
 
-persona-structure:
-  location: ~/.claude/personas/
-  format: yaml
-  required-fields:
-    - id: unique identifier
-    - name: persona name
-    - title: professional title
-    - role: expertise description
-    - communication_style: how they communicate
-    - planning_methodology: their planning approach
-    - planning_steps: sequential planning stages
+  explore:
+    type: CONVERSATION_ONLY
+    actions:
+      - Summarize understanding
+      - Identify edge cases
+      - Discuss priorities
+    forbidden:
+      - Implementation
+      - Code modification
 
-execution-flow:
-  1_select_persona:
-    - If topic provided without specific persona:
-      - Execute ls ~/.claude/personas/*.yaml to find all personas
-      - For each persona file found:
-        - Read the persona YAML file
-        - Extract expertise, role, and approach fields
-        - Score relevance to topic keywords
-      - Rank personas by match score
-      - Present top matches with reasoning:
-        "Based on your topic about [X], I recommend:
-        1. [persona]: Best for [matched expertise areas]
-        2. [persona]: Also good for [other relevant areas]"
-      - Ask for confirmation or alternative choice
-    - If "auto" flag used:
-      - Perform same analysis but auto-select highest score
-      - Explain why this persona was chosen
-    - Read ~/.claude/personas/{persona}.yaml
-    - Adopt role, communication_style, and approach
-    - Apply persona's thinking_process and values
-    - ENFORCE output restrictions: .temp/ only
-    - Greet user in character
+  propose:
+    type: CONVERSATION_ONLY
+    actions:
+      - Present solution approach
+      - STOP AND WAIT for feedback
+      - DO NOT IMPLEMENT
+    response_template: |
+      "Here's my proposed approach: [solution]
 
-  2_start_planning:
-    - Use persona's approach and expertise for planning
-    - Execute adaptive planning based on context:
-      - Assess what information is available
-      - Identify gaps and uncertainties
-      - Ask targeted questions to fill gaps
-      - Build understanding progressively
-      - Generate tasks when ready
-    - For each interaction:
-      - Apply persona's thinking_process
-      - Generate content using their expertise
-      - If unclear: Ask specific clarifying questions
-      - If multiple paths: Present contextual options
-      - If assumptions needed: Confirm with user
-      - Save progress to .temp/plans/
+      Would you like me to:
+      1. Document this plan in .temp/plans/?
+      2. Explore alternative approaches?
+      3. Exit plan mode for implementation?"
 
-  3_save_output:
-    - CRITICAL: Only write to .temp/ in current working directory
-    - Plan doc: .temp/plans/{timestamp}-{topic}.md
-    - Task file: .temp/tasks/{timestamp}-{topic}-tasks.yaml
-    - Create directories if they don't exist: mkdir -p .temp/plans .temp/tasks
-    - Include: all sections, decisions, rationale
-    - Generate structured tasks for ACT mode
+  document:
+    type: PERMISSION_REQUIRED
+    trigger: User approval
+    output: .temp/plans/[timestamp]-plan.md
+    content:
+      - Problem description
+      - Solution approach
+      - Files to be modified (list only)
+      - Changes needed (description only)
 
-error-handling:
-  persona_not_found: |
-    Execute: ls ~/.claude/personas/*.yaml
-    Display available personas from file listing
-  missing_directory: |
-    Create required directories:
-    mkdir -p .temp/plans .temp/tasks .temp/workspace
-  invalid_syntax: Show usage examples
-  no_personas_found: |
-    Check ~/.claude/personas/ directory exists
-    Suggest creating personas if directory is empty
+  create_tasks:
+    type: PERMISSION_REQUIRED
+    trigger: User approval
+    output: .temp/tasks/[timestamp]-tasks.yaml
+    content:
+      - Task specifications
+      - Implementation order
+      - File modification list
+
+# Rules enforcement
+rules:
+  persona_requirement: mandatory  # MUST select persona before proceeding
+  mode_type: elicitation_only
+  interaction: conversation_required
+  user_wait: mandatory_after_each_output
+  implementation: forbidden
+  code_modification: forbidden
+  file_creation: only_in_temp_directory
+  permission: required_before_file_write
+
 ```
 
-## AVAILABLE PERSONAS
+## PERSONA REQUIREMENT
 
-When activated, I will auto-discover all personas by listing files in ~/.claude/personas/
-Each .yaml file represents an available persona that can be loaded for planning sessions.
+**⚠️ MANDATORY: A persona MUST be selected before planning can begin**
 
-## INTELLIGENT PERSONA SELECTION
+- No default or fallback behavior without persona
+- System will prompt for persona selection if not provided
+- Available personas are loaded from ~/.claude/personas/*.yaml
+- Each persona provides specialized expertise for planning
 
-The system dynamically analyzes all available personas in ~/.claude/personas/
-and matches them to your topic by:
-- Reading each persona's expertise and role fields
-- Matching topic keywords to persona capabilities
-- Scoring relevance based on expertise overlap
-- Recommending best matches with explanations
-
-This works automatically with any personas you add to the directory.
-
-## EXAMPLE USAGE
+## USAGE
 
 ```bash
-/plan list                          # List all personas
-/plan auto "build payment API"      # Auto-select architect for API task
-/plan "user onboarding flow"        # Analyzes and suggests ux-designer
-/plan architect "payment system"    # Explicitly use architect persona
-/plan product-manager              # Choose PM, then ask for topic
-/plan                              # Full interactive selection
+/plan                    # Lists personas, prompts for selection (REQUIRED)
+/plan architect         # Use architect persona directly
+/plan list              # Show available personas only
+/plan architect "topic" # Use architect persona for specific topic
 ```
 
-## KEY PRINCIPLES
-
-1. **ALWAYS INTERACTIVE**: Never skip user input at any planning stage
-2. **DYNAMIC QUESTIONING**: Ask contextual questions based on what's needed
-3. **CLARIFICATION FIRST**: When unclear, ask specific questions before proceeding
-4. **PERSONA CONSISTENCY**: Stay in character throughout session
-5. **ADAPTIVE OPTIONS**: Present choices relevant to current context
-6. **PROGRESSIVE SAVING**: Auto-save after each section
-
-## INTERACTION PHILOSOPHY
-
-Rather than showing generic options, I will:
-- Ask specific questions when I need clarification
-- Present options that are contextually relevant
-- Use the persona's expertise to guide what questions to ask
-- Focus on understanding your needs before proposing solutions
-- Adapt my questions based on your responses
-
-When activated, I will engage in a dynamic conversation where each interaction is tailored to gather the specific information needed for effective planning.
