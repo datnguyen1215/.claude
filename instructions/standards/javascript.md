@@ -48,8 +48,27 @@
 ## Comments
 - Write self-documenting code
 - Comment why, not what
-- Use JSDoc for public APIs
+- Use JSDoc for public APIs (see instructions/standards/jsdoc.md)
 - Remove commented-out code
+
+## Error Handling
+- Always return errors, never throw in async functions
+- Use Error objects, not strings
+
+## Arrays/Objects
+- Prefer map/filter/reduce over for loops
+- Never mutate, always return new objects/arrays
+
+## Imports
+- One import per line
+- Alphabetical order within import groups
+
+## File Creation
+- Only create files that are essential (see instructions/minimal-file-creation.md)
+- Every file needs a JSDoc header explaining its purpose
+- Prefer modifying existing files over creating new ones
+- No unused imports, variables, or console.logs
+- No commented-out code or TODO sections
 
 ## Best Practices
 - Test edge cases and error paths
