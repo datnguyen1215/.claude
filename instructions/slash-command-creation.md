@@ -15,16 +15,8 @@ model: [optional] Specify Claude model
 ---
 ```
 
-### Available Tools for allowed-tools
-- Bash Tool
-- Code Execution Tool
-- Computer Use Tool
-- Text Editor Tool
-- Web Search Tool
-
 ## Argument System
 - `$ARGUMENTS` - All arguments as string
-- `$1`, `$2`, `$N` - Individual argument access
 - Arguments are always optional
 
 ## Special Features
