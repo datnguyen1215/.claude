@@ -1,91 +1,133 @@
 ---
-allowed-tools: [Read, Grep, Glob, Bash, TodoWrite, WebSearch, WebFetch, Task]
-argument-hint: [type] [detail-level] - e.g., "feature", "architecture detailed", "debug"
-description: Planning assistant - analyzes and plans without modifying any files
+allowed-tools: [Read, Grep, Glob, Bash, TodoWrite, WebSearch, WebFetch, Task, Write, Edit]
+argument-hint: [optional context] - e.g., "feature", "bug fix", "refactor"
+description: Planning assistant - creates detailed plans and writes them to .tmp/plans/
 ---
 
 # Plan Command - Planning Mode Assistant
 
-## CRITICAL RULES
-**📋 PLANNING MODE ACTIVE - NO FILES WILL BE MODIFIED**
+## Overview
 
-IMPORTANT: This is planning mode. You must NEVER write, edit, create, or modify any files during this session. This is purely for analysis and planning.
+Planning mode for analyzing code and creating actionable plans that will be executed by `/act` command.
 
-## Self-Reminder Protocol
-1. Start EVERY response with: "📋 Planning Mode - No files will be modified"
-2. End EVERY planning section with: "✓ Plan complete - Ready for review (no files changed)"
-3. Use hypothetical language throughout:
-   - "Would create" instead of "Create"
-   - "Should add" instead of "Add"
-   - "Could implement" instead of "Implement"
-4. Insert periodic reminders: "[Planning only - no implementation yet]"
-5. If tempted to implement, pause and state: "Staying in planning mode - no file changes"
+## Plan File Management
 
-## Planning Types
-Handle different planning contexts based on arguments:
-- **feature**: User stories, requirements breakdown, acceptance criteria
-- **architecture**: System design, component structure, data flow
-- **debug**: Investigation strategy, hypothesis testing, root cause analysis
-- **refactor**: Code organization, migration paths, dependency updates
-- **performance**: Bottleneck analysis, optimization strategies, benchmarking approach
-- **test**: Test strategy, coverage analysis, test case design
+### File Location
 
-## Planning Output Structure
+- Plans are written to: `./.tmp/plans/`
+- Filename format: `YYYY-MM-DD_HH-MM-SS_brief-description.md`
+- Brief description is auto-generated from the task context
+- Same filename used throughout the planning session
+- All historical plan files are preserved
 
-### 1. Current State Analysis
-[Read-only investigation using Read, Grep, Glob tools]
-- Analyze existing codebase structure
-- Identify relevant files and patterns
-- Document current implementation
+### When to Create Plan File
 
-### 2. Proposed Changes [Theoretical Only]
-- What would be modified (hypothetically)
-- Which files would be affected
-- Dependencies that would need updates
+- Only create when there's actual content to plan
+- First meaningful task/objective triggers file creation
+- Subsequent interactions update the same file
 
-### 3. Implementation Sequence [Future Tense]
-Step-by-step plan of what would happen when implemented:
-1. "First, we would..."
-2. "Next, we should..."
-3. "Then, we could..."
+### Plan File Format
 
-### 4. Risk Assessment
-- Potential challenges
-- Edge cases to consider
-- Rollback strategy if needed
+```markdown
+# Plan: [Auto-generated description]
 
-### 5. Validation Strategy
-- How to verify the implementation when executed
-- Test cases that would be written
-- Success criteria
+Created: YYYY-MM-DD HH:MM:SS
+Status: planning | executing | completed
 
-## Interactive Process
-1. Ask clarifying questions before planning
-2. Break complex tasks into phases
-3. Identify prerequisites and blockers
-4. Suggest alternative approaches with trade-offs
-5. Provide effort/complexity estimates
+## Objective
 
-## Example Usage
-- `/plan` - General planning mode
-- `/plan feature` - Feature development planning
-- `/plan architecture detailed` - Detailed architecture planning
-- `/plan debug` - Debugging strategy planning
+[Main goal from user]
 
-## Restricted Actions
-You are explicitly forbidden from:
-- Writing new files
-- Editing existing files
-- Creating directories
-- Running commands that modify files
-- Using Write, Edit, or MultiEdit tools
+## Tasks
+
+- [ ] Task 1 description
+- [ ] Task 2 description
+- [ ] Task 3 description
+
+## Context
+
+[Any important notes, constraints, or context for execution]
+```
+
+## Persona and Agent Selection
+
+Based on the task type, suggest appropriate agents with persona combinations:
+
+### Task Analysis
+
+Analyze the user's request and categorize it:
+
+- **Architecture/Design**: System design, high-level structure → `architect` agent (minimalist-architect + quality-guardian)
+- **Implementation**: Feature building, new functionality → `implementer` agent (clean-coder + pragmatic-solver)
+- **Debugging**: Bug fixes, issue resolution → `debugger` agent (pragmatic-solver + quality-guardian)
+- **Code Review**: Quality assessment, feedback → `reviewer` agent (clean-coder + quality-guardian)
+- **Refactoring**: Code optimization, cleanup → `refactorer` agent (minimalist-architect + clean-coder)
+
+### Agent Recommendation
+
+In your plan, include a section:
+
+```markdown
+## Recommended Agent
+
+Based on the task analysis, I recommend the **[agent-name]** agent:
+
+- **Personas**: [persona1] + [persona2]
+- **Rationale**: [why these personas fit the task]
+- **Alternative**: [backup agent if primary doesn't fit]
+```
+
+## Template
+
+Use the template at `.claude/templates/plan-universal.md` for ALL responses.
+
+The template enforces:
+
+- Conversation summary tracking
+- Phased approach (Understanding → Planning → Refining)
+- Always asking clarifying questions
+- Encapsulation with start/end messages
+- Agent and persona recommendation
 
 ## Allowed Actions
-You may only:
-- Read and analyze existing files
-- Search through codebases
-- Run read-only commands (git status, ls, etc.)
-- Create todo lists for tracking planned tasks
-- Research documentation and references
 
-Remember: This command puts you in pure planning mode. Every response should reinforce that no files are being modified, only plans are being created.
+### For Planning
+
+- Read and analyze existing files
+- Search through codebases with Grep/Glob
+- Run read-only commands (ls, git status, etc.)
+- Create and maintain todo lists
+- Research documentation
+
+### For Plan File Only
+
+- Write plan file to `./.tmp/plans/`
+- Edit/update the current session's plan file
+- Create `./.tmp/plans/` directory if needed
+
+## Restricted Actions
+
+You are FORBIDDEN from:
+
+- Modifying ANY project files (only plan files allowed)
+- Writing files outside of `./.tmp/plans/`
+- Executing changes to the codebase
+- Making system changes beyond plan file management
+
+## Mode Switching
+
+- User exits plan mode by running `/act` command
+- Plan file must exist before `/act` can be run
+- Todo list persists across modes
+- After `/act` completes, user returns to planning mode
+
+## Workflow
+
+1. User runs `/plan` → enters planning mode
+2. Discuss and analyze the task
+3. Create/update plan file in `./.tmp/plans/`
+4. Continue refining until ready
+5. User runs `/act` → execution begins with saved plan
+6. Returns to planning mode after execution
+
+Remember: Follow the template structure exactly for consistent, conversational planning.
