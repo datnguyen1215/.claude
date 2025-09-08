@@ -1,133 +1,86 @@
 ---
-allowed-tools: [Read, Grep, Glob, Bash, TodoWrite, WebSearch, WebFetch, Task, Write, Edit]
-argument-hint: [optional context] - e.g., "feature", "bug fix", "refactor"
-description: Planning assistant - creates detailed plans and writes them to .tmp/plans/
+description: Interactive planning session with persona-guided project planning
+argument-hint: What to plan (e.g., /plan refactor authentication system, /plan new feature design)
 ---
 
-# Plan Command - Planning Mode Assistant
+## Plan Configuration
 
-## Overview
+```yaml
+mode: plan
 
-Planning mode for analyzing code and creating actionable plans that will be executed by `/act` command.
+instructions:
+  - Read all files in required_read section parallelly in the same message
+  - Focus on conversational planning and context documentation only
+  - NO task creation during planning phase
+  - ABSOLUTELY NO file modifications except plan documents in working directory
+  - NEVER edit or create files outside the planning directory
+  - This is STRICTLY a discussion and documentation phase only
+  - MUST follow the workflow below
+  - If needed to get information regarding the codebase, use context-fetcher agents to get information
 
-## Plan File Management
+required_read:
+  - ~/.claude/personas/README.md
+  - ~/.claude/templates/plan-response.md
+  - ~/.claude/templates/plan-file-format.md
 
-### File Location
+working_directory: .tmp/plans/
 
-- Plans are written to: `./.tmp/plans/`
-- Filename format: `YYYY-MM-DD_HH-MM-SS_brief-description.md`
-- Brief description is auto-generated from the task context
-- Same filename used throughout the planning session
-- All historical plan files are preserved
+allowed_writes: plan.md ONLY
 
-### When to Create Plan File
+thinking_mode:
+  enabled: false
 
-- Only create when there's actual content to plan
-- First meaningful task/objective triggers file creation
-- Subsequent interactions update the same file
+workflow:
+  steps:
+    analyze_context: Parse planning context from $ARGUMENTS
+    persona_suggestions: Show suggested personas.
+    confirm_persona: User selects persona
+    assess_context_need: |
+      Determine if technical context is needed by analyzing $ARGUMENTS for keywords:
+      - Technical keywords: refactor, implement, integrate, debug, fix, optimize, migrate, upgrade, test
+      - Code-related terms: function, class, API, database, service, component, module, system
+      - If any technical keywords found: set context_needed=true
+      - If only documentation/planning keywords: set context_needed=false
+    fetch_context: |
+      If context_needed=true:
+      - Spawn context-fetcher agent using Task tool with:
+        - subagent_type: "context-fetcher"
+        - prompt: "Analyze the codebase for: {planning_topic}. Generate context.md with technical overview, key components, dependencies, and relevant code snippets."
+        - working_directory: current planning directory
+      - Wait for context-fetcher to complete context.md generation
+      If context_needed=false: skip this step
+    conversational_planning:
+      - Engage in dialogue while documenting
+      - Ask questions for clarity
+      - ABSOLUTELY no file modifications except plan documents in working directory
+      - Update the plan.md as we go
+    final: Finalize plan and suggest /tasks command to generate task list
 
-### Plan File Format
+persona_suggestions:
+  auto_selection:
+    enabled: true
+    rules:
+      - 1-5 most relevant to the $ARGUMENTS
+      - impersonate the persona throughout the planning discussion
+  format:
+    - [name] - [role] - [description]
 
-```markdown
-# Plan: [Auto-generated description]
+conversational_planning:
+  - adopt persona's unique perspective
+  - ask clarifying questions based on expertise
+  - guide discussion per persona priorities
+  - continuously document evolving plan
+  - maintain interactive dialogue
+  - response is concise, high level
+  - explore solution approaches and tradeoffs
+  - identify risks and dependencies
 
-Created: YYYY-MM-DD HH:MM:SS
-Status: planning | executing | completed
+questions:
+  rules:
+    - 1-5 relevant questions
+  format:
+    - 1. [question]
 
-## Objective
-
-[Main goal from user]
-
-## Tasks
-
-- [ ] Task 1 description
-- [ ] Task 2 description
-- [ ] Task 3 description
-
-## Context
-
-[Any important notes, constraints, or context for execution]
+output:
+  documents: {YYYY-MM-DD-hh-mm-ss}-{brief-description}/plan.md
 ```
-
-## Persona and Agent Selection
-
-Based on the task type, suggest appropriate agents with persona combinations:
-
-### Task Analysis
-
-Analyze the user's request and categorize it:
-
-- **Architecture/Design**: System design, high-level structure → `architect` agent (minimalist-architect + quality-guardian)
-- **Implementation**: Feature building, new functionality → `implementer` agent (clean-coder + pragmatic-solver)
-- **Debugging**: Bug fixes, issue resolution → `debugger` agent (pragmatic-solver + quality-guardian)
-- **Code Review**: Quality assessment, feedback → `reviewer` agent (clean-coder + quality-guardian)
-- **Refactoring**: Code optimization, cleanup → `refactorer` agent (minimalist-architect + clean-coder)
-
-### Agent Recommendation
-
-In your plan, include a section:
-
-```markdown
-## Recommended Agent
-
-Based on the task analysis, I recommend the **[agent-name]** agent:
-
-- **Personas**: [persona1] + [persona2]
-- **Rationale**: [why these personas fit the task]
-- **Alternative**: [backup agent if primary doesn't fit]
-```
-
-## Template
-
-Use the template at `.claude/templates/plan-universal.md` for ALL responses.
-
-The template enforces:
-
-- Conversation summary tracking
-- Phased approach (Understanding → Planning → Refining)
-- Always asking clarifying questions
-- Encapsulation with start/end messages
-- Agent and persona recommendation
-
-## Allowed Actions
-
-### For Planning
-
-- Read and analyze existing files
-- Search through codebases with Grep/Glob
-- Run read-only commands (ls, git status, etc.)
-- Create and maintain todo lists
-- Research documentation
-
-### For Plan File Only
-
-- Write plan file to `./.tmp/plans/`
-- Edit/update the current session's plan file
-- Create `./.tmp/plans/` directory if needed
-
-## Restricted Actions
-
-You are FORBIDDEN from:
-
-- Modifying ANY project files (only plan files allowed)
-- Writing files outside of `./.tmp/plans/`
-- Executing changes to the codebase
-- Making system changes beyond plan file management
-
-## Mode Switching
-
-- User exits plan mode by running `/act` command
-- Plan file must exist before `/act` can be run
-- Todo list persists across modes
-- After `/act` completes, user returns to planning mode
-
-## Workflow
-
-1. User runs `/plan` → enters planning mode
-2. Discuss and analyze the task
-3. Create/update plan file in `./.tmp/plans/`
-4. Continue refining until ready
-5. User runs `/act` → execution begins with saved plan
-6. Returns to planning mode after execution
-
-Remember: Follow the template structure exactly for consistent, conversational planning.
