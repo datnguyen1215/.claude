@@ -81,7 +81,7 @@ behavior:
   focus: planning_only
   specificity: high
   reminder: "You are in the PLAN phase. No implementation or file changes allowed."
-  exit_strategy: "Announce when planning is complete and suggest other commands to proceed such as /act, /tasks, /test-cases"
+  exit_strategy: "Suggest other commands to proceed such as /tasks"
   save_behavior: |
     - Automatically save planning progress before each response
     - Use timestamp format matching tasks.md for consistency

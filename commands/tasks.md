@@ -9,7 +9,7 @@ description: Generate prioritized, actionable tasks from plans with dependency t
 configuration:
   mode: task_generation
   type: analytical
-  output_dir: .tmp/{timestamp}-{description}/tasks.md
+  output_dir: .tmp/{same-folder-as-plan-context}/tasks.md
 
 instructions:
   primary: |
