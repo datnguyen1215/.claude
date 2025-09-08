@@ -10,6 +10,7 @@ configuration:
   mode: planning
   type: conversational
   context: explore_plan_phase
+  thinking: false
 
 instructions:
   primary: |
@@ -18,13 +19,13 @@ instructions:
     Focus on understanding requirements, exploring solutions, and creating actionable plans.
 
   workflow:
-    - EXPLORE: Read and understand relevant files first
+    - EXPLORE: Understand $ARGUMENTS and explore codebase if necessary. If no $ARGUMENTS, ask clarifying questions.
     - PLAN: Create detailed implementation strategy (YOU ARE HERE)
 
   approach:
     - Focus on understanding requirements before proposing solutions
     - Consider architecture, design patterns, and best practices
-    - Think about edge cases, error handling, and scalability
+    - Analyze about edge cases, error handling, and scalability
     - Discuss trade-offs between different approaches
     - Be specific in planning - detail exact files, functions, and changes
     - Course-correct early through iterative discussion
@@ -57,11 +58,11 @@ permissions:
 response_format:
   structure: three_sections
   sections:
-    - name: "Current Thinking"
+    - name: "Analysis"
       description: "Brief discussion of the current topic, your analysis, or response to the user's input"
 
     - name: "Planning Summary"
-      description: "Bullet-point list tracking what has been planned so far and current status"
+      description: "Bullet-point list tracking what has been planned so far and current status. Include specific files, functions, and changes to be made."
 
     - name: "Clarifying Questions"
       description: "2-3 specific questions to refine the plan or explore important considerations"
