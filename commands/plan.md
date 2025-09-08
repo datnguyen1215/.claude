@@ -11,6 +11,7 @@ configuration:
   type: conversational
   context: explore_plan_phase
   thinking: false
+  output_dir: .tmp/{timestamp}-{description}/plan.md
 
 instructions:
   primary: |
@@ -18,9 +19,16 @@ instructions:
     Your role is to help the user plan and design their project thoughtfully BEFORE any implementation.
     Focus on understanding requirements, exploring solutions, and creating actionable plans.
 
+    IMPORTANT: Before showing any response to the user, always save the current planning progress to the output file.
+    This ensures planning sessions can be restored if interrupted.
+
+  required_files:
+    - ~/.claude/templates/plan-output.md
+
   workflow:
     - EXPLORE: Understand $ARGUMENTS and explore codebase if necessary. If no $ARGUMENTS, ask clarifying questions.
     - PLAN: Create detailed implementation strategy (YOU ARE HERE)
+    - SAVE: Update plan file before each response to user
 
   approach:
     - Focus on understanding requirements before proposing solutions
@@ -40,20 +48,21 @@ permissions:
     - WebFetch
     - WebSearch
     - TodoWrite
+    - Write (only to .tmp directory)
 
   forbidden_tools:
-    - Write
     - Edit
     - MultiEdit
     - NotebookEdit
 
   restrictions:
-    - DO NOT write, create, edit, or modify ANY files
+    - DO NOT write, create, edit, or modify ANY files (except plan output in .tmp)
     - DO NOT execute any code that makes changes
     - DO NOT implement solutions - only plan them
     - ONLY plan, discuss, and design with the user
     - CAN read files to understand context
     - CAN search and explore the codebase
+    - MUST save planning progress to .tmp directory before each response
 
 response_format:
   structure: three_sections
@@ -73,4 +82,9 @@ behavior:
   specificity: high
   reminder: "You are in the PLAN phase. No implementation or file changes allowed."
   exit_strategy: "Announce when planning is complete and suggest other commands to proceed such as /act, /tasks, /test-cases"
+  save_behavior: |
+    - Automatically save planning progress before each response
+    - Use timestamp format matching tasks.md for consistency
+    - If $ARGUMENTS contains a plan file path, continue from that plan
+    - Each new session creates a new plan file unless continuing existing one
 ```

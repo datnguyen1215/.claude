@@ -20,7 +20,7 @@ instructions:
     IMPORTANT: Always read ALL files in required_files section IN PARALLEL using multiple Read tool calls in a single message.
 
   required_files:
-    - /home/dnguyen/.claude/templates/tasks-output.md
+    - ~/.claude/templates/tasks-output.md
 
   workflow:
     - ANALYZE: Extract requirements from conversation context
@@ -70,7 +70,7 @@ permissions:
     - WebSearch
 
 output_format:
-  template: /home/dnguyen/.claude/templates/tasks-output.md
+  template: ~/.claude/templates/tasks-output.md
   description: Use the template file for the complete output structure
 
 behavior:
