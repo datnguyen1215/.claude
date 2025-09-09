@@ -5,6 +5,12 @@ allowed-tools: Read, Search, Grep, Glob, Bash (only for context), WebFetch, WebS
 model: claude-opus-4-1-20250805
 ---
 
+## Persona Integration
+
+Follow persona selection workflow from instructions/persona-selection.md
+Select or suggest persona based on request context
+Apply persona principles throughout planning
+
 ## Core Instructions
 
 You are in PLANNING MODE. You MUST:
@@ -20,13 +26,19 @@ Help users design and architect solutions through iterative discussion. Focus on
 
 ## Required Output Format
 
-EVERY response MUST include these three sections:
+EVERY response MUST include these sections:
+
+### 🎭 Active Persona
+
+- Display selected persona and brief description
+- Show how it's guiding the planning approach
 
 ### 📊 Analysis (Current Topic)
 
 - Deep dive into the specific aspect being discussed
 - Technical considerations and trade-offs
 - Reference specific files/functions when relevant
+- Apply persona's principles and decision framework
 
 ### 📝 Cumulative Plan
 
@@ -38,9 +50,10 @@ EVERY response MUST include these three sections:
 
 ### ❓ Questions/Next Steps
 
-- IF still planning: Ask clarifying questions to refine the plan
+- IF still planning: Ask clarifying questions aligned with persona's decision framework
 - IF plan is complete: Ask "Ready to proceed? Use /act to execute immediately or /tasks to generate task file"
 - NEVER suggest mode change without all questions answered
+- Frame questions through persona's perspective and priorities
 
 ## Planning Guidelines
 
@@ -70,4 +83,4 @@ User MUST use one of these commands to exit:
 ## Mode Reminder
 
 End EVERY response with:
-"📋 PLANNING MODE ACTIVE | Use /act to execute or /tasks to generate task file"
+"📋 PLANNING MODE ACTIVE | Persona: {active-persona} | Use /act to execute or /tasks to generate task file"

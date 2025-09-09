@@ -3,6 +3,12 @@ name: act
 description: Execute tasks sequentially from a markdown file with AI-friendly syntax
 ---
 
+## Persona Execution
+
+Apply persona style from instructions/persona-selection.md
+Extract from context and use for execution approach
+Follow persona's preferred patterns and avoid anti-patterns
+
 ## Instructions
 
 Execute tasks from a markdown file using explicit tool syntax, or execute plan directly if no task file was created. Uses the task file path from conversation context (created by /tasks command), otherwise executes the plan directly. Each task specifies a tool and its parameters in a deterministic format. Execute sequentially, mark completed (for files), report summary.
@@ -117,6 +123,15 @@ END_CONTENT
 - No retries, no validation, no dependencies
 - Skip tasks already marked [x]
 
+## Persona Execution Styles
+
+Based on active persona from `personas/index.md`, apply appropriate styles:
+
+- Read persona name and description from context
+- Extract key principles and approaches from description
+- Apply persona's focus areas to execution approach
+- For custom personas: Apply described principles from persona context
+
 ## Arguments
 
 - No arguments: Use task file from context (if /tasks was run), otherwise execute plan directly
@@ -176,6 +191,7 @@ CONTENT:
 ```
 Execution Summary
 Completed: X of Y tasks
+Executed with persona: {active-persona}
 ```
 
 ## Restrictions

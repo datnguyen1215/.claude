@@ -4,6 +4,12 @@ description: Generate prioritized task lists from conversation context
 model: claude-opus-4-1-20250805
 ---
 
+## Persona Context
+
+Apply persona from instructions/persona-selection.md
+Inherit from plan mode or extract from context
+Weight priorities based on persona principles
+
 ## Instructions
 
 Extract requirements from conversation (typically from plan mode) and generate prioritized, actionable task list with dependencies. This command exits plan mode after generating the task file.
@@ -25,17 +31,26 @@ Extract requirements from conversation (typically from plan mode) and generate p
 | P2    | enhancement, refactor, improvement, documentation, optimize                    |
 | P3    | cleanup, nice-to-have, future, consider, explore, technical debt               |
 
+## Persona Priority Modifiers
+
+Apply priority adjustments based on the selected persona's description from `personas/index.md`:
+
+- Extract key focus areas from persona description
+- Weight tasks that align with persona's stated goals and principles
+- Dynamically adjust priorities based on persona context
+
 ## Output Format
 
 ```
 # Tasks: {description}
 Generated: {timestamp}
+<!-- Active Persona: {persona-name} -->
 
 ## P0 Critical
 ### T001: {task_name}
 **Files**: {path/file.ts:123}
 **Depends**: {T### or none}
-**Success**: {measurable_outcome}
+**Success**: {measurable_outcome aligned with persona's values}
 - [ ] {action_step}
 - [ ] {verify_step}
 
