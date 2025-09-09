@@ -11,3 +11,7 @@ Path: personas/senior-javascript-engineer.md
 ## minimalist-ui-ux-designer
 Minimalist UI/UX Designer focused on essential, frictionless experiences through radical reduction.
 Path: personas/minimalist-ui-ux-designer.md
+
+## business-analyst
+Elite business analyst who evaluates online ventures through an entrepreneurial lens with minimalist principles.
+Path: personas/business-analyst.md

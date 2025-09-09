@@ -1,60 +1,64 @@
-# Task List: {description}
+# Project Tasks: [Extract project name from context]
 
-Generated: {timestamp}
-Session: {session_id}
+Generated: [Current timestamp]
+Session: [Current session ID]
 
 ## 📊 Summary
+- Total Tasks: [Count] (P0: [count], P1: [count], P2: [count], P3: [count])
+- Dependencies Identified: [Number of tasks with dependencies]
+- Estimated Completion Order: [Brief description of execution flow]
 
-- Total Tasks: {total} (P0: {p0}, P1: {p1}, P2: {p2}, P3: {p3})
-- Failed/Retry Tasks: {retry_count}
-- Dependencies Identified: {dep_count}
-- Estimated Completion Order: {order_summary}
+## P0 - Critical
+Tasks that must be done first, blocking other work or addressing critical issues
 
-## 🔴 P0 - Critical Priority
+### T001: [Task name extracted from context]
+- [ ] [Specific subtask or action item]
+- [ ] [Another specific action]
+- [ ] [Verification or testing step]
 
-### T001: {task_name} {retry_badge}
-
-**Dependencies:** [T002, T005]
-**Files:** `src/module.js:45-60`, `lib/helper.ts:120`
-
-**Objective:** {clear_description}
-
-**Tasks:**
-
-- [ ] Research current implementation in `module.js:handleRequest()`
-- [ ] Update error handling to prevent data loss
-- [ ] Add validation for user input parameters
-- [ ] Write unit tests for edge cases
-
-**Commands:**
-
-```bash
-npm test src/module.test.js
-grep -r "handleRequest" src/
-```
-
-**Success Criteria:**
-
-- All tests pass without errors
-- No security vulnerabilities in scan
-- Error handling covers all edge cases
+*Depends on: [T### if applicable]*
 
 ---
 
-## 🟡 P1 - High Priority
+## P1 - High Priority
+Important features and fixes that should be addressed soon
 
-{similar_structure}
+### T002: [Task name]
+- [ ] [Action item]
+- [ ] [Nested subtask if complex]
+  - [ ] [Sub-action 1]
+  - [ ] [Sub-action 2]
+- [ ] [Final verification]
 
-## 🟢 P2 - Medium Priority
+*Depends on: [T### if applicable]*
 
-{similar_structure}
+### T003: [Another high priority task]
+- [ ] [Action items]
+- [ ] [More actions]
 
-## 🔵 P3 - Low Priority
+---
 
-{similar_structure}
+## P2 - Medium Priority
+Improvements and optimizations that enhance the system
+
+### T004: [Task name]
+- [ ] [Action items]
+- [ ] [More specific steps]
+
+*Depends on: [T### if applicable]*
+
+---
+
+## P3 - Nice to Have
+Future enhancements and non-critical improvements
+
+### T005: [Task name]
+- [ ] [Action items]
+- [ ] [Optional improvements]
+
+---
 
 ## 📋 Dependency Graph
-
 ```
 T001 ──> T002 ──> T004
      └─> T003 ──> T005
@@ -62,5 +66,8 @@ T006 (independent)
 ```
 
 ## ⚠️ Previously Failed Tasks
+[If any tasks from previous runs failed, list them here with context]
 
-{if_any_found_list_with_original_context}
+### From [previous timestamp]
+- T00X: [Task that failed] - [Reason for failure]
+- Retry with: [Suggested fix or approach]

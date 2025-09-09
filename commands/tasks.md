@@ -1,90 +1,81 @@
 ---
 name: tasks
-description: Generate prioritized, actionable tasks from plans with dependency tracking
+description: Generate prioritized task lists from conversation context
+model: claude-opus-4-1-20250805
 ---
 
-# Tasks Command Configuration
+## Mode
+task_generation
 
-```yaml
-configuration:
-  mode: task_generation
-  type: analytical
-  output_dir: .tmp/{same-folder-as-plan-context}/tasks.md
+## Type
+analytical
 
-instructions:
-  primary: |
-    Generate comprehensive task lists from current conversation and codebase analysis.
-    Create detailed, actionable items for coding agents with clear dependencies.
-    Track and highlight previously failed tasks from earlier runs.
+## Instructions
+Extract requirements from full conversation context and generate prioritized task list in PM style. Create actionable items with clear dependencies. The main agent maintains all context and will provide it when this command is triggered.
 
-    IMPORTANT: Always read ALL files in required_files section IN PARALLEL using multiple Read tool calls in a single message.
+## Workflow
+1. **ANALYZE**: Extract requirements from conversation context
+2. **RESEARCH**: Search codebase for relevant files and functions
+3. **DETECT**: Find any failed tasks in previous .tmp/*/tasks.md files
+4. **PRIORITIZE**: Auto-assign P0-P3 based on keywords and criticality
+5. **DEPENDENCIES**: Identify task relationships and ordering
+6. **GENERATE**: Create structured markdown with detailed subtasks
+7. **OUTPUT**: Save to timestamped directory
 
-  required_files:
-    - ~/.claude/templates/tasks-output.md
+## Priority Rules
+### P0 Critical
+Keywords: security, vulnerability, data loss, breaking, critical, urgent, crash, exploit
+Patterns: production issue, customer impact, compliance
 
-  workflow:
-    - ANALYZE: Extract requirements from conversation context
-    - RESEARCH: Search codebase for relevant files/functions
-    - DETECT: Find failed tasks in previous .tmp/*/tasks.md files
-    - PRIORITIZE: Auto-assign P0-P3 based on keywords/patterns
-    - DEPENDENCIES: Identify task relationships and ordering
-    - GENERATE: Create structured markdown with detailed subtasks
-    - OUTPUT: Save to timestamped directory
+### P1 High
+Keywords: bug, error, failed, core, api, integration, user-facing
+Patterns: test failure, regression, performance degradation
 
-  priority_rules:
-    P0_critical:
-      keywords:
-        [
-          security,
-          vulnerability,
-          data loss,
-          breaking,
-          critical,
-          urgent,
-          crash,
-          exploit,
-        ]
-      patterns: [production issue, customer impact, compliance]
-    P1_high:
-      keywords: [bug, error, failed, core, api, integration, user-facing]
-      patterns: [test failure, regression, performance degradation]
-    P2_medium:
-      keywords: [enhancement, refactor, improvement, documentation, optimize]
-      patterns: [code quality, maintainability, developer experience]
-    P3_low:
-      keywords: [cleanup, nice-to-have, future, consider, explore]
-      patterns: [technical debt, minor optimization]
+### P2 Medium
+Keywords: enhancement, refactor, improvement, documentation, optimize
+Patterns: code quality, maintainability, developer experience
 
-  dependency_detection:
-    keywords: [requires, depends on, after, before, needs, blocks, blocked by]
-    analyze: [file references, import chains, function calls, data flow]
+### P3 Low
+Keywords: cleanup, nice-to-have, future, consider, explore
+Patterns: technical debt, minor optimization
 
-permissions:
-  allowed_tools:
-    - Read
-    - Grep
-    - Glob
-    - Bash
-    - Write (only to .tmp directory)
-    - WebFetch
-    - WebSearch
+## Dependency Detection
+- Keywords: requires, depends on, after, before, needs, blocks, blocked by
+- Analyze: file references, import chains, function calls, data flow
 
-output_format:
-  template: ~/.claude/templates/tasks-output.md
-  description: Use the template file for the complete output structure
+## Output
+- **Template**: templates/tasks-output.md
+- **Location**: .tmp/{timestamp}-{description}/tasks.md
+- **Timestamp Format**: %Y%m%d-%H%M%S
 
-behavior:
-  task_generation:
-    - Be specific with file paths and line numbers
-    - Include relevant CLI commands for verification
-    - Break complex tasks into clear subtasks
-    - Always specify success criteria
-    - Mark retry tasks clearly with [RETRY] badge
-    - Use consistent task ID format (T001, T002, etc.)
+## Required Files
+- ~/.claude/templates/tasks-output.md
 
-  research_depth:
-    - Search for all mentioned functions/classes
-    - Check test coverage for modified code
-    - Identify related configuration files
-    - Find documentation that needs updates
-```
+## Allowed Tools
+- Read
+- Grep
+- Glob
+- Bash
+- Write (only to .tmp directory)
+- WebFetch
+- WebSearch
+
+## Task Generation Guidelines
+- Be specific with file paths and line numbers
+- Include relevant CLI commands for verification
+- Break complex tasks into clear subtasks
+- Always specify success criteria
+- Mark retry tasks clearly with [RETRY] badge
+- Use consistent task ID format (T001, T002, etc.)
+- Search for all mentioned functions/classes
+- Check test coverage for modified code
+- Identify related configuration files
+- Find documentation that needs updates
+
+## Behavior
+- Read ALL required files in PARALLEL using multiple Read tool calls
+- Extract requirements from conversation without requiring explicit plan file
+- Auto-detect priority based on keywords and patterns
+- Generate comprehensive task lists with dependencies
+- Focus on actionable, specific tasks
+- Include verification commands where applicable
