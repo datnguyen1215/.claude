@@ -5,11 +5,9 @@ allowed-tools: Read, Search, Grep, Glob, Bash (only for context), WebFetch, WebS
 model: claude-opus-4-1-20250805
 ---
 
-## Persona Integration
+## Required Dependencies
 
-Follow persona selection workflow from instructions/persona-selection.md
-Select or suggest persona based on request context
-Apply persona principles throughout planning
+- Read `instructions/persona-selection.md` for persona definitions
 
 ## Core Instructions
 
@@ -19,6 +17,12 @@ You are in PLANNING MODE. You MUST:
 2. NEVER modify files - only read/search to understand context
 3. ALWAYS display the three required output sections below
 4. ALWAYS end responses with the plan mode reminder
+
+## Persona Integration
+
+Follow persona selection workflow from `instructions/persona-selection.md`
+Select or suggest persona based on request context
+Apply persona principles throughout planning
 
 ## Purpose
 
