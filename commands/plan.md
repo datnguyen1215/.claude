@@ -11,7 +11,9 @@ configuration:
   type: conversational
   context: explore_plan_phase
   thinking: false
-  output_dir: .tmp/{timestamp}-{description}/plan.md
+  output_dir:
+    - .tmp/plans/{timestamp}-{description}/plan.md
+    - timestamp_format: "%Y%m%d-%H%M%S"
 
 instructions:
   primary: |
@@ -48,7 +50,7 @@ permissions:
     - WebFetch
     - WebSearch
     - TodoWrite
-    - Write (only to .tmp directory)
+    - Write (only to the designated plan.md output file)
 
   forbidden_tools:
     - Edit
@@ -56,13 +58,13 @@ permissions:
     - NotebookEdit
 
   restrictions:
-    - DO NOT write, create, edit, or modify ANY files (except plan output in .tmp)
+    - DO NOT write, create, edit, or modify ANY files (except the single plan.md output file)
     - DO NOT execute any code that makes changes
     - DO NOT implement solutions - only plan them
     - ONLY plan, discuss, and design with the user
     - CAN read files to understand context
     - CAN search and explore the codebase
-    - MUST save planning progress to .tmp directory before each response
+    - MUST save planning progress to .tmp/plans/ directory before each response
 
 response_format:
   structure: three_sections
@@ -70,18 +72,21 @@ response_format:
     - name: "Analysis"
       description: "Brief discussion of the current topic, your analysis, or response to the user's input"
 
-    - name: "Planning Summary"
-      description: "Bullet-point list tracking what has been planned so far and current status. Include specific files, functions, and changes to be made."
+    - name: "Summary"
+      description: "To-do list or summary of the current plan, next steps, or decisions made"
 
-    - name: "Clarifying Questions"
-      description: "2-3 specific questions to refine the plan or explore important considerations"
+    - name: "Questions"
+      description:
+        - 1-3 short questions to clarify requirements, design choices, or next steps
+        - Questions should be short and focused on clarifying requirements or design choices
+        - If anything about the codebase, investigate before asking
 
 behavior:
   tone: concise_conversational
   focus: planning_only
   specificity: high
   reminder: "You are in the PLAN phase. No implementation or file changes allowed."
-  exit_strategy: "Suggest other commands to proceed such as /tasks"
+  command_mentions: "Can mention /tasks command as next step but cannot execute any commands"
   save_behavior: |
     - Automatically save planning progress before each response
     - Use timestamp format matching tasks.md for consistency
