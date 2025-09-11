@@ -6,311 +6,138 @@ model: claude-opus-4-1-20250805
 
 ## Purpose
 
-Execute tasks from current plan/task file using parallel agents for improved performance. Launches scout for context discovery, task-manager for optimization, and up to 5 worker agents for parallel execution.
+Execute tasks in parallel using multiple specialized agents. Automatically determines which tasks can run simultaneously based on file conflicts and dependencies.
 
-## Instructions
+## Session Setup
 
-You are the parallel command coordinator. Your job is to:
+Uses folder from current context (created by /plan or /tasks command):
+- If task file exists: `{task_file_directory}/parallel-session/`
+- If from plan without task file: `.tmp/$(date +%Y%m%d-%H%M%S)-orchestrate/parallel-session/`
 
-1. **LOCATE**: Find task file from context or use current plan
-2. **PREPARE**: Set up session workspace
-3. **LAUNCH**: Execute orchestration flow
-4. **MONITOR**: Display progress until completion
+Session structure:
+```
+parallel-session/
+  messages/         # Agent inbox/outbox JSON files
+  locks/           # File-level lock files
+  context.json     # Scout's codebase analysis
+  execution-plan.json  # Task manager's groupings
+```
 
 ## Workflow
 
-### 1. Find Tasks
+### 1. Scout Agent
+- Analyzes codebase to understand context
+- Identifies file relationships and potential conflicts
+- Creates context.json for other agents
 
-Check in order:
+### 2. Task Manager Agent
+- Reads tasks and scout's context
+- Groups non-conflicting tasks for parallel execution
+- Creates execution plan with up to 5 parallel workers
+- Assigns personas to each worker based on task type
 
-1. Task file from recent `/tasks` command
-2. Current plan from `/plan` mode
-3. User-specified task file
+### 3. Worker Agents (1-5 parallel)
+- Execute assigned tasks simultaneously when no conflicts exist
+- Each worker maintains its own persona throughout execution
+- Use file locks to prevent simultaneous edits to same file
 
-### 2. Create Session Workspace
+### 4. Code Review Agent
+- Reviews all modified files after workers complete
+- Identifies issues: critical, major, minor, suggestions
+- Generates improvement tasks
 
-```bash
-# If task file exists
-TASK_DIR=$(dirname $TASK_FILE)
-SESSION_DIR="$TASK_DIR/parallel-session"
+### 5. Fix Worker Agents
+- Apply all code review suggestions
+- Run in parallel when fixing different files
+- Ensure code quality improvements are implemented
 
-# If using plan directly
-SESSION_DIR=".tmp/$(date +%Y%m%d-%H%M%S)-parallel/parallel-session"
+## Parallelization Rules
+
+Tasks run in parallel when:
+- They modify different files
+- They have no dependencies on each other
+- They belong to the same priority level
+
+Tasks run sequentially when:
+- They modify the same file
+- They have explicit dependencies (T002 depends on T001)
+- File locks prevent parallel access
+
+## Persona Assignment
+
+- Each worker receives a persona from `instructions/persona-selection.md`
+- Or generates a task-specific persona based on:
+  - File types being modified
+  - Task descriptions and keywords
+  - Domain requirements
+- Workers maintain their persona throughout execution for consistency
+
+## Output Format
+
+Progress shows parallelization status:
+```
+⚡ [PARALLEL] T003, T004, T005 running on workers 1-3
+🔄 [SEQUENTIAL] T006 waiting (file conflict with T003)
+✓ Group completed: 5 tasks in 12s | Parallelism: 4.2x
 ```
 
-Structure:
-
+Final summary includes:
 ```
-parallel-session/
-  messages/       # Agent communication
-  locks/          # File-level locks
-  context.json    # Shared discovery
-  progress.txt    # Real-time status
-```
-
-### 3. Orchestration Flow
-
-#### Step 1: Launch Scout Agent
-
-```json
-{
-  "subagent_type": "general-purpose",
-  "prompt": "You are the scout agent. Discover codebase context and save to {session_dir}/context.json. Follow agents/scout-agent.md.",
-  "description": "Context discovery"
-}
+PARALLELIZATION METRICS
+Parallel Tasks: 7 of 9 (78%)
+Sequential Tasks: 2 of 9 (due to conflicts)
+Parallelism Achieved: 2.8x speedup
+Duration: 42 seconds (vs ~118s sequential)
 ```
 
-#### Step 2: Launch Task-Manager Agent
+## Agent Communication
 
-```json
-{
-  "subagent_type": "general-purpose",
-  "prompt": "You are the task-manager. Read tasks from {task_file} and context from {session_dir}/context.json. Create optimized execution plan. Follow agents/task-manager-agent.md.",
-  "description": "Task optimization"
-}
-```
+All agents communicate through JSON messages in session folder.
 
-#### Step 3: Read Execution Plan
+### Message Formats
 
-- Load `{session_dir}/execution-plan.json`
-- Determine worker count from groups
-- Prepare task assignments
-
-#### Step 4: Execute Groups
-
-```python
-for group in execution_plan.groups:
-    workers_needed = min(group.workers_needed, 5)
-
-    # Launch workers for this group
-    for i in range(workers_needed):
-        launch_worker(f"worker-{i+1}", group.tasks[i])
-
-    # Monitor completion
-    while group_not_complete:
-        check_worker_outboxes()
-        handle_failures()
-        update_progress()
-```
-
-#### Step 5: Dynamic Worker Management
-
-- Scale workers up/down per group
-- Replace failed workers (same ID)
-- Skip tasks after 3 failures
-
-### 4. Event-Driven Progress
-
-Display updates only when events occur:
-
-- Task started: "⚡ T003 started by worker-2"
-- Task completed: "✓ T003 completed by worker-2"
-- Task failed: "✗ T003 failed: file locked"
-- Worker replaced: "⚠️ Worker-3 replaced, resuming T005"
-- Group completed: "═══ Group G1 completed: 5 tasks in 12s ═══"
-
-Full status refresh every 10 events or 30 seconds:
-
-```
-═══════════════════════════════════════════════════════════
-ORCHESTRATION STATUS
-═══════════════════════════════════════════════════════════
-✓ T001: Scout agent created
-✓ T002: Worker agent created
-⚡ T003: Running on worker-1
-⏳ T004: Pending (depends on T003)
-⏳ T005: Queued for next group
-═══════════════════════════════════════════════════════════
-Group G1: 2 completed | 1 running | 0 pending
-Workers: 1 active | 4 available
-Time elapsed: 00:42
-═══════════════════════════════════════════════════════════
-```
-
-## Agent Architecture
-
-### Scout Agent
-
-- **Role**: Context discovery
-- **Runs**: Once at start
-- **Output**: `context.json` with codebase info, hot files, patterns
-
-### Task-Manager Agent
-
-- **Role**: Task optimization and grouping
-- **Runs**: Once after scout
-- **Input**: `tasks.md` + `context.json`
-- **Output**: `execution-plan.json` with parallel groups
-
-### Worker Agents (1-5)
-
-- **Role**: Task execution
-- **Runs**: In parallel, scaled per group
-- **Communication**: Inbox/outbox messages
-- **Locking**: File-level to prevent conflicts
-
-### Orchestrate Command
-
-- **Role**: Direct orchestration (no separate agent)
-- **Manages**: All agents lifecycle
-- **Monitors**: Real-time progress
-- **Handles**: Failures, replacements, and scaling
-
-## Message Protocol
-
-All agents communicate via JSON files:
-
-### Inbox Format
-
+**Worker Inbox** (`messages/worker-{id}-inbox.json`):
 ```json
 {
   "worker_id": "worker-1",
-  "session_folder": "path/to/session",
-  "tasks": [...]
+  "session_folder": "{path}/parallel-session",
+  "tasks": ["T001", "T003", "T005"],
+  "persona": "senior-javascript-engineer"
 }
 ```
 
-### Outbox Format
-
+**Worker Outbox** (`messages/worker-{id}-outbox.json`):
 ```json
 {
   "worker_id": "worker-1",
-  "tasks_completed": [...],
-  "tasks_failed": [...]
+  "tasks_completed": ["T001", "T003"],
+  "tasks_failed": ["T005"],
+  "files_modified": ["src/index.js", "src/utils.js"]
 }
 ```
 
-## File Locking
-
-Simple file-level locks prevent conflicts:
-
-- Lock file: `locks/{file-hash}.lock`
-- Contains: Worker ID
-- Acquired before modification
-- Released after completion
-
-## Priority Execution
-
-Tasks executed by priority:
-
-1. **P0**: Critical - blocks all others
-2. **P1**: High - after P0
-3. **P2**: Medium - after P1
-4. **P3**: Nice-to-have - last
-
-## Dependency Handling
-
-### Explicit
-
-From task file: "Depends: T001"
-
-- Wait for T001 completion
-- Then assign task
-
-### Implicit
-
-Detected from file operations:
-
-- T001 creates file.js
-- T002 modifies file.js
-- T002 waits for T001
-
-## Error Handling
-
-### Worker Failures
-
-- Timeout: 30 seconds per task
-- Automatic worker replacement:
-  1. Detect worker timeout/crash
-  2. Release worker's file locks: `rm {session}/locks/*worker-{id}*`
-  3. Move tasks back to queue
-  4. Launch replacement: Same worker ID (worker-3 → worker-3)
-  5. Assign queued tasks to replacement
-  6. Update user: "⚠️ Worker-{id} replaced"
-- Skip task after 3 failures across different workers
-
-### File Lock Conflicts
-
-- Task deferred if file locked
-- Retried when lock released
-- Reported if persistent
-
-### Critical Failures
-
-Execution stops if:
-
-- No workers available
-- All P0 tasks fail
-- Session folder inaccessible
-
-## Performance
-
-### Targets
-
-- Context discovery: <30 seconds
-- Task assignment: <1 second
-- Worker response: <30 seconds
-- Progress updates: Every 1 second
-
-### Expected Speedup
-
-- 2-3x for independent tasks
-- 1.5-2x for dependent tasks
-- Minimal for sequential tasks
-
-## Arguments
-
-- **None**: Use recent task file or current plan
-- **Path**: Execute specific task file
-- **--workers N**: Limit workers (default: 5)
-
-## Examples
-
-### Basic Usage
-
-```bash
-/parallel
-# Uses task file from recent /tasks command
+**Context** (`context.json` - from scout):
+```json
+{
+  "hot_files": ["src/index.js"],
+  "task_relevant_files": {"src/utils.js": "high"},
+  "conflicts": [{"file": "src/index.js", "tasks": ["T001", "T006"]}]
+}
 ```
 
-### Specific File
-
-```bash
-/parallel .tmp/20241209-tasks/tasks.md
+**Execution Plan** (`execution-plan.json` - from task manager):
+```json
+{
+  "groups": [
+    {
+      "id": "G1",
+      "tasks": ["T001", "T003", "T005"],
+      "parallel": true,
+      "persona": "senior-javascript-engineer"
+    }
+  ]
+}
 ```
 
-### Limited Workers
-
-```bash
-/parallel --workers 3
-# Use only 3 parallel workers
-```
-
-## Output
-
-Final execution summary:
-
-```
-══════════════════════════════════════════════════════════
-EXECUTION SUMMARY
-══════════════════════════════════════════════════════════
-Completed: 8 of 9 tasks
-Failed: 1 task (T007: timeout)
-Duration: 42 seconds
-Workers used: 5
-Parallelism achieved: 2.8x speedup
-══════════════════════════════════════════════════════════
-```
-
-## Tools Required
-
-- Task: Launch agents
-- Read: Monitor progress
-- Bash: Check session setup
-
-## Restrictions
-
-- Maximum 5 worker agents
-- Session isolation per execution
-- No state persistence between runs
-- File-level locking only
+**Lock Files** (`locks/{filename-hash}.lock`):
+Contains only the worker ID that holds the lock: `worker-1`

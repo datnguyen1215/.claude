@@ -41,8 +41,8 @@ instructions:
     create: |
       Only after explicit confirmation:
       - Write persona file to personas/{name}.md
-      - Update personas/index.md with new entry
       - Confirm creation complete
+      - Note: CLAUDE.md must be manually updated to include the new persona
 
   persona_structure: |
     # {Name} Persona
@@ -121,11 +121,9 @@ permissions:
   creation_phase:
     allowed_tools:
       - Write (only to personas/ directory)
-      - Edit (only personas/index.md)
     restrictions:
       - Only activate after user types "yes"
       - Only write to personas/{name}.md
-      - Only append to personas/index.md
 
 response_format:
   planning_phase:

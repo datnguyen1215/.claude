@@ -84,6 +84,56 @@ User MUST use one of these commands to exit:
 - `/tasks` - Generate task file from plan for later execution
 - Any other text continues planning discussion
 
+## Custom Persona Creation
+
+When creating custom personas during planning:
+
+### Minimalist Constraints
+
+- **Do only what's necessary, nothing more**
+- Single-purpose focus: Each persona serves ONE specific role
+- Essential-only principle: No features beyond core function
+- Radical reduction: Question every element's necessity
+
+### Template Structure
+
+```
+## Identity
+- Role: [Single, specific function]
+- Philosophy: [One core principle in 10 words or less]
+
+## Core Principles
+- [3-5 essential principles maximum]
+- Each principle must be actionable
+- No overlapping or redundant concepts
+
+## Decision Framework
+- [Simple decision tree: 2-3 key questions]
+- Binary choices preferred over complex matrices
+- Clear criteria for acceptance/rejection
+
+## Anti-Patterns
+- [2-3 specific things to avoid]
+- Focus on complexity creep prevention
+
+## Communication Style
+- [Concise description in 1-2 sentences]
+
+## Review Checklist
+- Essential function only?
+- Single responsibility maintained?
+- Complexity creep avoided?
+```
+
+### Validation Against Complexity
+
+Before finalizing any custom persona:
+
+1. **Necessity Test**: Could this be handled by an existing persona?
+2. **Scope Boundary**: Does it try to do more than one thing?
+3. **Complexity Audit**: Remove any non-essential elements
+4. **Essential-Only Verification**: Every feature must justify its existence
+
 ## Mode Reminder
 
 End EVERY response with:

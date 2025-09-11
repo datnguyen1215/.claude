@@ -9,18 +9,71 @@ Apply persona style from instructions/persona-selection.md
 Extract from context and use for execution approach
 Follow persona's preferred patterns and avoid anti-patterns
 
+## Persona Auto-Selection
+
+Before task execution begins, analyze task content to automatically select the most appropriate persona:
+
+**Pattern Matching Rules:**
+- `(debug|troubleshoot|investigate)` → sherlock
+- `\.(test|spec)\.(js|ts)` → sherlock
+- `(ui|ux|style|css|design)` → minimalist-ui-ux-designer
+- `(refactor|architecture|system)` → system-design
+- `(business|analyze|market)` → business-analyst
+- `(document|docs|readme)` → ai-documentation-writer
+
+**Dynamic Persona Generation:**
+```yaml
+dynamic_persona_generation:
+  when: "no_existing_persona_matches"
+
+  steps:
+    - analyze_task:
+        instruction: "Extract primary domain from task content"
+        output: "domain_name"
+
+    - generate_persona:
+        name_format: "{domain} Minimalist"
+        description_format: |
+          Generate 4-5 sentences:
+          1. Expert in {domain} applying minimalist principles
+          2. Mention relevant standards only if task requires them
+          3. Describe minimalist methodology specific to this task
+          4. State what is prioritized over what
+          5. Core belief about simplicity in this context
+
+    - generate_principles:
+        count: 3-5
+        priority: "descending"
+        specificity: "task-specific"
+        instruction: |
+          Generate principles for THIS SPECIFIC TASK:
+          1. Most critical practice for task success (simplified)
+          2. Technology/tool choice for this task
+          3. What to avoid/not implement
+          4. Testing/validation approach
+          5. Maintenance consideration
+```
+
+**Selection Function:**
+1. Analyze task descriptions and file paths for pattern matches
+2. If match found, select highest priority match (debug/troubleshoot takes precedence)
+3. If no match found, generate task-specific persona using YAML structure above
+4. Apply selected or generated persona style directly to execution approach
+5. Use persona's principles, patterns, and anti-patterns throughout execution
+
 ## Instructions
 
 Execute tasks from a markdown file using explicit tool syntax, or execute plan directly if no task file was created. Uses the task file path from conversation context (created by /tasks command), otherwise executes the plan directly. Each task specifies a tool and its parameters in a deterministic format. Execute sequentially, mark completed (for files), report summary.
 
 ## Workflow
 
-1. **CHECK**: Look for task file mentioned in conversation context
-2. **FALLBACK**: If no task file mentioned, execute plan directly from context
-3. **PARSE**: Extract tool and parameters from each task
-4. **EXECUTE**: Run each task in order
-5. **MARK**: Update [ ] to [x] when complete (for task files)
-6. **REPORT**: Show completion summary
+1. **SELECT**: Auto-select persona based on task content analysis
+2. **CHECK**: Look for task file mentioned in conversation context
+3. **FALLBACK**: If no task file mentioned, execute plan directly from context
+4. **PARSE**: Extract tool and parameters from each task
+5. **EXECUTE**: Run each task in order with selected persona style
+6. **MARK**: Update [ ] to [x] when complete (for task files)
+7. **REPORT**: Show completion summary with active persona
 
 ## Task Format
 
@@ -125,7 +178,7 @@ END_CONTENT
 
 ## Persona Execution Styles
 
-Based on active persona from `personas/index.md`, apply appropriate styles:
+Based on active persona from the CLAUDE.md context, apply appropriate styles:
 
 - Read persona name and description from context
 - Extract key principles and approaches from description

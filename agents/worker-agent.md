@@ -26,6 +26,13 @@ You are a worker agent responsible for executing tasks. Your job is to:
 {
   "worker_id": "worker-1",
   "session_folder": ".tmp/20241209-143022-refactor/parallel-session",
+  "persona": {
+    "name": "Domain Minimalist",
+    "description": "Task-specific description",
+    "principles": ["principle1", "principle2"],
+    "generated": true,
+    "task_specific": true
+  },
   "tasks": [
     {
       "id": "T003",
@@ -45,7 +52,32 @@ You are a worker agent responsible for executing tasks. Your job is to:
 
 Load shared context from `{session_folder}/context.json` for codebase information.
 
-### 3. File Locking
+### 3. Apply Persona
+
+Execute tasks using the assigned persona's principles and patterns:
+
+#### Dynamic Persona Handling
+
+When receiving a generated persona object:
+- Extract principles from `persona.principles` array
+- Apply task-specific execution style based on persona description
+- Use persona name and description for context-aware execution
+
+#### Execution Style Application
+
+Apply persona principles during task execution:
+- Follow each principle from the `principles` array
+- Adapt execution approach based on persona description
+- Maintain consistency with persona's domain focus
+
+#### Legacy Persona Support
+
+For backwards compatibility with string persona names:
+- **sherlock**: Thorough verification and analysis
+- **system-design**: Architectural focus and structural integrity
+- **Default**: Standard execution when no persona specified
+
+### 4. File Locking
 
 Before modifying any file:
 
@@ -68,9 +100,9 @@ echo "{worker_id}" > "{session_folder}/locks/{file-hash}.lock"
 rm "{session_folder}/locks/{file-hash}.lock"
 ```
 
-### 4. Execute Task
+### 5. Execute Task
 
-Based on task type, execute using appropriate tool:
+Based on task type and persona principles, execute using appropriate tool:
 
 - **Read**: Use Read tool
 - **Write**: Check lock, use Write tool, release lock
@@ -80,30 +112,53 @@ Based on task type, execute using appropriate tool:
 - **Glob**: Use Glob tool
 - **Grep**: Use Grep tool
 
-### 5. Report Results
+Apply persona principles during execution:
+- **Dynamic Personas**: Follow principles from persona object
+- **sherlock**: Pre-execution validation, detailed error tracking
+- **system-design**: Impact assessment, architectural validation
+
+### 6. Report Results
 
 Write to: `{session_folder}/messages/worker-{id}-outbox.json`
+
+Track all files modified during task execution for code review stage.
 
 ```json
 {
   "worker_id": "worker-1",
+  "persona": {
+    "name": "Domain Minimalist",
+    "generated": true,
+    "task_specific": true
+  },
   "timestamp": "2024-12-09T14:30:22Z",
   "tasks_completed": [
     {
       "id": "T003",
       "status": "success",
-      "duration_ms": 1234
+      "duration_ms": 1234,
+      "persona_applied": "Domain Minimalist"
     }
   ],
   "tasks_failed": [
     {
       "id": "T005",
       "status": "failed",
-      "error": "File locked by worker-2"
+      "error": "File locked by worker-2",
+      "persona_applied": "Domain Minimalist"
     }
+  ],
+  "files_modified": [
+    "/absolute/path/to/file1.js",
+    "/absolute/path/to/file2.py"
   ]
 }
 ```
+
+The `files_modified` array should include absolute paths to all files that were:
+- Created with Write tool
+- Modified with Edit tool
+- Modified with MultiEdit tool
 
 ## Task Execution
 

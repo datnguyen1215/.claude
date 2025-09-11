@@ -33,7 +33,7 @@ Extract requirements from conversation (typically from plan mode) and generate p
 
 ## Persona Priority Modifiers
 
-Apply priority adjustments based on the selected persona's description from `personas/index.md`:
+Apply priority adjustments based on the selected persona's description from the CLAUDE.md context:
 
 - Extract key focus areas from persona description
 - Weight tasks that align with persona's stated goals and principles
