@@ -25,6 +25,8 @@ parallel-session/
 
 ## Workflow
 
+Follow `instructions/parallel-agents.md` for launching multiple agents in parallel.
+
 ### 1. Scout Agent
 - Analyzes codebase to understand context
 - Identifies file relationships and potential conflicts
@@ -38,6 +40,7 @@ parallel-session/
 
 ### 3. Worker Agents (1-5 parallel)
 - Execute assigned tasks simultaneously when no conflicts exist
+- Launch multiple workers in single message per `instructions/parallel-agents.md`
 - Each worker maintains its own persona throughout execution
 - Use file locks to prevent simultaneous edits to same file
 
