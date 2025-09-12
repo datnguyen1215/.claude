@@ -146,7 +146,7 @@ Save discovery to `{session-folder}/context.json`:
    - **Static personas**: Apply legacy mapping:
      - UI/UX personas → prefer minimal mode
      - System-design personas → prefer comprehensive mode
-     - Debugging personas (sherlock) → prefer focused mode
+     - Debugging personas (senior-engineer) → prefer focused mode
    - Override persona preference if explicit mode specified
 3. **Execute based on final mode:**
    - Minimal: Quick scan of task files only

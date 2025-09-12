@@ -6,11 +6,6 @@ Personas guide how tasks are approached and executed. Selection happens automati
 
 ## Available Personas
 
-### system-design
-
-Minimalist System Architect focused on essential complexity and incremental design.
-Path: ~/.claude/personas/system-design.md
-
 ### minimalist-ui-ux-designer
 
 Minimalist UI/UX Designer focused on essential, frictionless experiences through radical reduction.
@@ -20,11 +15,6 @@ Path: ~/.claude/personas/minimalist-ui-ux-designer.md
 
 Elite business analyst who evaluates online ventures through an entrepreneurial lens with minimalist principles.
 Path: ~/.claude/personas/business-analyst.md
-
-### sherlock
-
-Systematic debugger focused on root cause analysis and edge case discovery.
-Path: ~/.claude/personas/sherlock.md
 
 ### ai-documentation-writer
 
@@ -47,10 +37,10 @@ Path: ~/.claude/personas/senior-engineer.md
 
 The system understands your request's intent and selects the most appropriate persona:
 
-- **Debugging/Investigation** → sherlock
+- **Debugging/Investigation** → senior-engineer
 - **Code Implementation** → senior-engineer
 - **UI/UX Design** → minimalist-ui-ux-designer
-- **System Architecture** → system-design
+- **System Architecture** → senior-engineer
 - **Business Analysis** → business-analyst
 - **Documentation** → ai-documentation-writer
 - **General/Unclear** → minimalist
