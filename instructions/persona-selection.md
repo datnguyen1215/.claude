@@ -59,27 +59,40 @@ No keywords or patterns - just understanding what you're trying to accomplish.
 
 ## Persona Loading Process
 
+### Mandatory Minimalist Foundation
+
+**CRITICAL REQUIREMENT**: Before loading ANY persona, you MUST FIRST load `personas/minimalist.md`
+- All personas inherit minimalist principles as their foundation
+- The minimalist test (Delete, Simplify, Clarify, Consolidate) must be applied before any domain-specific decisions
+- This is NOT optional - minimalist.md provides the core principles that all other personas build upon
+- Always announce: "Loading minimalist.md as foundation before persona"
+
 ### Required Actions
 
 When a persona is selected (either automatically or manually), you MUST:
 
-1. **Read the persona file** from the path specified in CLAUDE.md's Personas Index
+1. **Load minimalist.md first** (if not already loaded)
+   - This step is mandatory and provides the foundation
+   - Read `~/.claude/personas/minimalist.md` before the selected persona
+   - Apply minimalist principles throughout the task
+
+2. **Read the persona file** from the path specified in CLAUDE.md's Personas Index
    - Example: For senior-engineer, read `~/.claude/personas/senior-engineer.md`
    - Announce: "Loading senior-engineer persona from ~/.claude/personas/senior-engineer.md"
 
-2. **Load all referenced files** mentioned within the persona
-   - If the persona references other files (e.g., minimalist.md, coding standards), load those as well
+3. **Load all referenced files** mentioned within the persona
+   - If the persona references other files (e.g., coding standards), load those as well
    - Announce each additional file being loaded
-   - Example: "Loading referenced minimalist.md principles"
+   - Example: "Loading standards/javascript.md as specified by senior-engineer"
 
-3. **Apply the complete framework** throughout the task:
+4. **Apply the complete framework** throughout the task:
    - Follow the persona's Core Principles
    - Use the Decision Framework for all choices
    - Avoid listed Anti-Patterns
    - Apply the Communication Style
    - Execute any specific instructions in the persona file
 
-4. **Verify successful loading**:
+5. **Verify successful loading**:
    - Confirm all files were read successfully
    - If a persona file cannot be read, fall back to minimalist persona
    - State which principles are being actively applied
