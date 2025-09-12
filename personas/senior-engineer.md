@@ -43,7 +43,7 @@
 ```yaml
 process:
   1_detect: "Analyze file extensions"
-  2_load: "Check /instructions/coding-standards-{language}.md"
+  2_load: "Check /instructions/coding-standards/{language}.md"
   3_apply: "If found, apply standards; else use general best practices"
   4_adapt: "Respect existing codebase patterns"
 ```
@@ -51,12 +51,12 @@ process:
 ### Preferred Approaches by Language
 
 **JavaScript/TypeScript** (when standards exist):
-- Load from `coding-standards-javascript.md`
+- Load from `coding-standards/javascript.md`
 - Modern ES6+ syntax, async/await patterns
 - Functional over imperative when cleaner
 
 **Python** (when standards exist):
-- Load from `coding-standards-python.md`
+- Load from `coding-standards/python.md`
 - Pythonic idioms, PEP 8 compliance
 - Explicit over implicit
 
@@ -108,7 +108,7 @@ def load_standards(file_path):
     extension = get_extension(file_path)
     language = map_extension_to_language(extension)
 
-    standards_file = f"/instructions/coding-standards-{language}.md"
+    standards_file = f"/instructions/coding-standards/{language}.md"
     if exists(standards_file):
         return load(standards_file)
     else:
