@@ -1,7 +1,7 @@
 # JavaScript Coding Standards
 
 ## Purpose
-Technical standards and best practices for JavaScript/TypeScript projects. These standards focus on measurable quality metrics and proven patterns.
+Technical standards and best practices for JavaScript projects. These standards focus on measurable quality metrics and proven patterns.
 
 ## Language Requirements
 
@@ -19,6 +19,45 @@ Technical standards and best practices for JavaScript/TypeScript projects. These
 - **Error Handling:** Try-catch blocks for async operations
 - **Concurrency:** Promise.all() for parallel operations
 
+## Functional Programming Principles
+
+### Core Principles
+- **Pure Functions:** Default approach for all functions
+- **Immutability:** Never mutate data, create new copies
+- **Composition:** Build complex behavior from simple functions
+- **No Side Effects:** Functions should not modify external state
+- **Declarative:** Describe what, not how
+
+### Function Patterns
+- **Higher-Order Functions:** Functions that accept/return functions
+- **Currying:** Break down multi-argument functions
+- **Partial Application:** Pre-fill function arguments
+- **Function Composition:** Combine simple functions
+- **Pipe/Compose:** Chain operations declaratively
+
+### Immutability Rules
+- **Objects:** Use spread operator or Object.assign for updates
+- **Arrays:** Use map, filter, reduce instead of mutations
+- **Never:** Use push, pop, splice, shift, unshift directly
+- **Freeze:** Consider Object.freeze for true constants
+- **Libraries:** Consider Immutable.js or Immer for complex cases
+
+### Composition Patterns
+```javascript
+// Prefer composition
+const withLogging = (fn) => (...args) => {
+  const result = fn(...args);
+  console.log(result);
+  return result;
+};
+
+// Over classes
+const createUser = (name) => ({
+  name,
+  greet: () => `Hello, ${name}`
+});
+```
+
 ## Code Structure Limits
 
 ### Function Metrics
@@ -34,11 +73,12 @@ Technical standards and best practices for JavaScript/TypeScript projects. These
 - **Imports:** Group and order consistently
 - **Dependencies:** Justify each external dependency
 
-### Class Metrics
-- **Size:** Maximum 200 lines (warn at 150)
-- **Methods:** Maximum 10 public methods
-- **Constructor:** Minimal logic, primarily assignment
-- **Inheritance:** Prefer composition over inheritance
+### When Classes Are Justified
+- **Framework Requirements:** When framework demands classes (rare)
+- **Performance:** Proven performance benefit (measured)
+- **External APIs:** When interfacing with class-based libraries
+- **Always Prefer:** Factory functions and object composition
+- **Never:** Use classes for simple data structures or utilities
 
 ## Naming Conventions
 
@@ -68,75 +108,52 @@ Technical standards and best practices for JavaScript/TypeScript projects. These
 ### JavaScript-Specific Issues
 - **Type Coercion:** Implicit type conversions
 - **Global Variables:** Polluting global scope
-- **Mutable Operations:** Modifying objects/arrays in place
+- **Mutable Operations:** Any mutation of objects/arrays (critical anti-pattern)
+- **Class Overuse:** Using classes when functions suffice
+- **Stateful Functions:** Functions with side effects
+- **Imperative Loops:** Using for/while instead of map/filter/reduce
 - **Synchronous Operations:** Blocking I/O in Node.js
 - **Memory Leaks:** Uncleaned event listeners, timers
 
 ## Framework Guidelines
 
 ### React Patterns
-- **Components:** Functional components with hooks
-- **State:** Minimal state, derived values when possible
-- **Props:** PropTypes or TypeScript interfaces
-- **Effects:** Cleanup in useEffect returns
-- **Memoization:** Only when measurably needed
+- **Components:** Functional components only (no class components)
+- **State:** useState, useReducer with immutable updates
+- **Props:** Pure functions of props to JSX
+- **Effects:** Minimize useEffect, prefer derived state
+- **Composition:** Custom hooks for logic reuse
 
 ### Node.js Patterns
-- **Modules:** Small, focused modules
-- **Error Handling:** Proper error propagation
-- **Streams:** For large data processing
-- **Environment:** Use environment variables for config
-- **Security:** Input validation, parameterized queries
+- **Modules:** Pure function exports
+- **Middleware:** Functional composition pattern
+- **Data Processing:** Stream transformations
+- **Error Handling:** Functional error handling (Result/Either pattern)
+- **No Classes:** Use factory functions for instances
 
 ### Vue Patterns
-- **Composition API:** Preferred over Options API
-- **Reactivity:** Understand ref vs reactive
-- **Components:** Single-file components < 150 lines
-- **Props/Events:** Clear parent-child communication
+- **Composition API:** Always use over Options API
+- **Composables:** Pure functions returning reactive state
+- **Computed:** Prefer computed over watchers
+- **Components:** Functional where possible
 
-## Type Safety
+## Documentation Requirements
 
-### TypeScript Usage
-- **Interfaces:** Define all data structures
-- **Types:** Avoid `any`, use `unknown` when needed
-- **Generics:** When truly reusable
-- **Enums:** Prefer const assertions or union types
-- **Strict Mode:** Enable all strict checks
-
-### JSDoc (When Not Using TypeScript)
-- **Functions:** Document parameters and returns
-- **Complex Types:** Define with @typedef
-- **Public APIs:** Full documentation required
+### JSDoc Standards
+- **Required:** All functions and files must be documented
+- **Reference:** See `coding-standards-jsdoc.md` for detailed requirements
+- **File Headers:** Every file must explain its purpose and module context
+- **Function Docs:** Parameters, returns, and throws must be documented
+- **Type Definitions:** Use @typedef for complex data structures
+- **AI-Friendly:** Documentation must be machine-readable and parseable
 
 ## Performance Considerations
-
-### Optimization Rules
-- **Measure First:** Profile before optimizing
-- **Algorithm Choice:** O(n) better than O(n²)
-- **Lazy Loading:** Load only what's needed
-- **Caching:** Cache expensive computations
-- **Bundling:** Minimize bundle size
 
 ### Memory Management
 - **Cleanup:** Remove listeners, clear timers
 - **References:** Avoid circular references
 - **Closures:** Be aware of closure scope
 - **Large Data:** Use streams or pagination
-
-## Testing Requirements
-
-### Test Structure
-- **Coverage:** Critical paths must be tested
-- **Isolation:** Tests should not depend on each other
-- **Speed:** Unit tests < 100ms each
-- **Clarity:** Test names describe behavior
-- **Maintenance:** Tests shouldn't break from refactoring
-
-### Testing Patterns
-- **AAA Pattern:** Arrange, Act, Assert
-- **Mocking:** Mock external dependencies only
-- **Edge Cases:** Test boundaries and errors
-- **Integration:** Test critical user paths
 
 ## Error Handling
 
@@ -171,6 +188,9 @@ Technical standards and best practices for JavaScript/TypeScript projects. These
 - [ ] Nested callbacks or promise chains
 - [ ] Security vulnerabilities
 - [ ] Memory leaks
+- [ ] Direct mutations of data
+- [ ] Unnecessary class usage
+- [ ] Side effects in pure functions
 
 ### Should Fix (Important)
 - [ ] Functions over 20 lines
@@ -178,6 +198,9 @@ Technical standards and best practices for JavaScript/TypeScript projects. These
 - [ ] Deep nesting (>3 levels)
 - [ ] Missing error handling
 - [ ] Code duplication (>5 lines)
+- [ ] Imperative code that could be declarative
+- [ ] Missing pure function documentation
+- [ ] Stateful operations
 
 ### Consider Fixing (Suggested)
 - [ ] Complex conditionals
@@ -185,14 +208,6 @@ Technical standards and best practices for JavaScript/TypeScript projects. These
 - [ ] Inconsistent naming
 - [ ] Performance optimizations
 - [ ] Additional documentation
-
-## Refactoring Priorities
-
-1. **Security Issues:** Fix immediately
-2. **Bugs:** Fix before adding features
-3. **Performance:** When measurably slow
-4. **Readability:** When maintaining
-5. **Structure:** During feature additions
 
 ## Exceptions
 
