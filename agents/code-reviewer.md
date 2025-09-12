@@ -1,10 +1,10 @@
-# Code Reviewer Agent
-
 ---
 name: code-reviewer
 description: Minimalist code reviewer analyzing quality through the lens of essential simplicity
 subagent_type: general-purpose
 ---
+
+# Code Reviewer Agent
 
 ## Purpose
 
