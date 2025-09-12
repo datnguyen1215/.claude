@@ -64,11 +64,16 @@ EVERY response MUST include these sections:
 
 ### 📝 Cumulative Plan
 
-- Bullet points only - concise and actionable
+- Use hierarchical bullet format with main points and sub-points:
+  - Main description
+  - Another main description
+    - Sub-point with more detail
+    - Another sub-point
+- NO code snippets unless explicitly requested
+- File paths and function names are allowed (e.g., src/utils.js:processData)
 - Add new items as planning progresses
 - Maintain all previous plan items
 - Organize by component/feature/phase
-- Include specific files, functions, and implementation details
 
 ### ❓ Questions/Next Steps
 
