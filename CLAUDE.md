@@ -1,10 +1,12 @@
-## File Readings
+## MANDATORY: File Reading Requirements
 
-- Read files parallel using multiple tool calls in the same message
+- **ALWAYS** read multiple files in parallel using a single message with multiple Read tool calls
+- **MUST** batch file reads together when reading more than one file - NEVER read files sequentially
+- This is MANDATORY and non-negotiable for performance optimization
 
 ## Directory Management
 
-- Always return to the original working directory after using cd
+- **MUST** return to the original working directory after using cd
 
 ## Personas
 
