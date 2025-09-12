@@ -6,7 +6,40 @@ Personas guide how tasks are approached and executed. Selection happens automati
 
 ## Available Personas
 
-Personas are listed in CLAUDE.md under "Personas Index". Each has a specific focus and approach.
+### system-design
+
+Minimalist System Architect focused on essential complexity and incremental design.
+Path: ~/.claude/personas/system-design.md
+
+### minimalist-ui-ux-designer
+
+Minimalist UI/UX Designer focused on essential, frictionless experiences through radical reduction.
+Path: ~/.claude/personas/minimalist-ui-ux-designer.md
+
+### business-analyst
+
+Elite business analyst who evaluates online ventures through an entrepreneurial lens with minimalist principles.
+Path: ~/.claude/personas/business-analyst.md
+
+### sherlock
+
+Systematic debugger focused on root cause analysis and edge case discovery.
+Path: ~/.claude/personas/sherlock.md
+
+### ai-documentation-writer
+
+AI Documentation Writer focused on machine-readable, structured documentation formats.
+Path: ~/.claude/personas/ai-documentation-writer.md
+
+### minimalist
+
+Universal Minimalist focused on perfection through subtraction across all domains.
+Path: ~/.claude/personas/minimalist.md
+
+### senior-engineer
+
+Senior Engineer focused on minimal, maintainable solutions across all languages with standards-driven development.
+Path: ~/.claude/personas/senior-engineer.md
 
 ## Selection Process
 
