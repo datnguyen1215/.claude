@@ -37,8 +37,8 @@ You are the task-manager agent responsible for optimizing task execution:
 ### 1. Read Inputs
 
 Load from session folder:
-- Task file: Contains all tasks with IDs, priorities, and dependencies
-- Context file: Contains codebase analysis from scout agent
+- Task file: `tasks.md` containing all tasks with IDs, priorities, and dependencies
+- Context file: `context.md` containing codebase analysis from scout agent
 
 ### 2. Task Analysis
 
@@ -76,7 +76,7 @@ Create execution groups following these rules:
 
 ### 6. Output Format
 
-Save execution plan to `{session_folder}/execution-plan.json` with:
+Save execution plan to `{session_folder}/execution-plan.md` with:
 - Total task count and group count
 - Groups with their tasks and parallelization status
 - Conflict map showing file-level conflicts
@@ -95,52 +95,77 @@ Use scout's context to make smarter decisions:
 
 ### Input Message
 
-Read from: `{session_folder}/messages/task-manager-inbox.json`
+Read from: `{session_folder}/messages/task-manager-inbox.md`
 
 Expected format:
-```json
-{
-  "session_folder": "path/to/session",
-  "task_file": "tasks.md",
-  "context_file": "context.json",
-  "worker_count": 5
-}
+```markdown
+# Task Manager Inbox
+<!-- Instructions for task optimization -->
+
+## Session Folder
+path/to/session
+
+## Input Files
+- Task file: tasks.md
+- Context file: context.md
+
+## Worker Count
+5 workers available for parallel execution
 ```
 
 ### Output Message
 
-Write to: `{session_folder}/messages/task-manager-outbox.json`
+Write to: `{session_folder}/messages/task-manager-outbox.md`
 
 Format:
-```json
-{
-  "status": "completed",
-  "execution_plan": "execution-plan.json",
-  "summary": "Optimized X tasks into Y groups, Z parallelism achieved",
-  "metrics": {
-    "parallelism_score": 3.2,
-    "groups_created": 4
-  }
-}
+```markdown
+# Task Manager Report
+<!-- Optimization complete -->
+
+## Status
+Completed
+
+## Output File
+execution-plan.md
+
+## Summary
+Optimized X tasks into Y groups with Z parallelism score.
+
+## Metrics
+- Parallelism score: 3.2
+- Groups created: 4
+- Tasks that can run in parallel: 12 of 15
 ```
 
 ### Execution Plan Structure
 
-The execution-plan.json should contain:
-```json
-{
-  "groups": [
-    {
-      "id": "G1",
-      "tasks": ["T001", "T003", "T005"],
-      "parallel": true,
-      "workers_needed": 3
-    }
-  ],
-  "conflict_map": {
-    "file.js": ["T001", "T006"]
-  }
-}
+The execution-plan.md should contain:
+```markdown
+# Execution Plan
+<!-- Optimized task groupings for parallel execution -->
+
+## Parallelization Strategy
+Group tasks by file conflicts. Maximum 5 workers per group.
+
+## Group 1 - Parallel Execution
+<!-- These tasks can run simultaneously -->
+**Workers Needed:** 3
+**Tasks:**
+- T001: Edit src/auth.js - Update authenticate function (assign to worker-1)
+- T003: Edit src/api.js - Add validation (assign to worker-2)
+- T005: Edit src/utils.js - Refactor helpers (assign to worker-3)
+
+## Group 2 - Sequential Required
+<!-- These tasks must run after Group 1 -->
+**Reason:** T006 depends on T001 completion
+**Tasks:**
+- T006: Test auth changes
+- T007: Update documentation
+
+## Conflict Map
+<!-- Files with multiple task modifications -->
+- src/auth.js: T001, T006 (sequential required)
+- src/config.js: T002, T008 (sequential required)
 ```
 
 ## Error Handling

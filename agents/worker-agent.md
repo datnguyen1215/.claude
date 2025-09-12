@@ -33,29 +33,25 @@ You are a worker agent responsible for executing tasks. Your job is to:
 
 ### 1. Read Assignment
 
-```json
-// Read from: {session_folder}/messages/worker-{id}-inbox.json
-{
-  "worker_id": "worker-1",
-  "session_folder": ".tmp/20241209-143022-refactor/parallel-session",
-  "tasks": [
-    {
-      "id": "T003",
-      "priority": "P1",
-      "type": "Edit",
-      "file": "/path/to/file.js",
-      "params": {
-        "old_string": "foo",
-        "new_string": "bar"
-      }
-    }
-  ]
-}
+```markdown
+# Worker 1 Assignment
+<!-- Read from: {session_folder}/messages/worker-{id}-inbox.md -->
+
+You are worker-1 in session .tmp/20241209-143022-refactor/parallel-session
+
+## Your Tasks
+- T001: Update the authenticate function in src/auth.js to use async/await
+- T003: Add input validation to src/api.js getUser function
+- T005: Run tests for authentication module
+
+Check context.md for file intelligence before editing files.
+Use file locks in the locks/ folder before modifying any file.
+Report results to worker-1-outbox.md when complete.
 ```
 
 ### 2. Check Context
 
-Load shared context from `{session_folder}/context.json` for codebase information.
+Load shared context from `{session_folder}/context.md` for codebase information. The context file contains file intelligence that may eliminate the need to read files directly.
 
 ### 3. Apply Context-Based Approach
 
@@ -103,35 +99,36 @@ Apply context-appropriate approach during execution based on task understanding.
 
 ### 6. Report Results
 
-Write to: `{session_folder}/messages/worker-{id}-outbox.json`
+Write to: `{session_folder}/messages/worker-{id}-outbox.md`
 
 Track all files modified during task execution for code review stage.
 
-```json
-{
-  "worker_id": "worker-1",
-  "approach_used": "context-appropriate",
-  "summary": "Updated 3 JavaScript files with async/await patterns and minimal error handling",
-  "timestamp": "2024-12-09T14:30:22Z",
-  "tasks_completed": [
-    {
-      "id": "T003",
-      "status": "success",
-      "duration_ms": 1234
-    }
-  ],
-  "tasks_failed": [
-    {
-      "id": "T005",
-      "status": "failed",
-      "error": "File locked by worker-2"
-    }
-  ],
-  "files_modified": [
-    "/absolute/path/to/file1.js",
-    "/absolute/path/to/file2.py"
-  ]
-}
+```markdown
+# Worker 1 Report
+<!-- Status report from worker-1 -->
+
+## Summary
+Completed 2 of 3 tasks. One task failed due to file lock.
+
+## Completed Tasks
+<!-- Successfully executed -->
+- T001: Updated authenticate function in src/auth.js @ L15
+- T003: Added validation to src/api.js @ L67
+
+## Failed Tasks
+<!-- Could not complete -->
+- T005: src/config.js locked by worker-2
+
+## Files Modified
+<!-- All files changed for code review stage -->
+- /absolute/path/to/file1.js
+- /absolute/path/to/file2.py
+
+## Approach Used
+Context-appropriate execution based on task requirements
+
+## Timestamp
+2024-12-09T14:30:22Z
 ```
 
 The `files_modified` array should include absolute paths to all files that were:
@@ -141,41 +138,18 @@ The `files_modified` array should include absolute paths to all files that were:
 
 ## Task Execution
 
-### Edit Task
+Tasks are described in natural language in the inbox. Parse the task description to determine the appropriate tool and parameters.
 
-```json
-{
-  "type": "Edit",
-  "file": "/path/to/file.js",
-  "params": {
-    "old_string": "exact text",
-    "new_string": "replacement"
-  }
-}
-```
+### Example Task Descriptions
 
-### Write Task
+- "T001: Update the authenticate function in src/auth.js to use async/await"
+  → Use Edit tool on src/auth.js, check context.md for line numbers
 
-```json
-{
-  "type": "Write",
-  "file": "/path/to/new.js",
-  "params": {
-    "content": "file contents here"
-  }
-}
-```
+- "T002: Create new config file at src/config.js with default settings"
+  → Use Write tool to create src/config.js
 
-### Bash Task
-
-```json
-{
-  "type": "Bash",
-  "params": {
-    "command": "npm test"
-  }
-}
-```
+- "T003: Run tests for authentication module"
+  → Use Bash tool to run appropriate test command
 
 ## Lock File Format
 
@@ -221,10 +195,10 @@ echo -n "/path/to/file.js" | sha256sum | cut -c1-16
 
 ## Communication Protocol
 
-1. Poll inbox every 1 second
-2. Process all assigned tasks
-3. Update outbox after each task
-4. Signal completion when inbox empty
+1. Read inbox markdown file once at start
+2. Read context.md for file intelligence
+3. Process all assigned tasks
+4. Write outbox markdown file when complete
 
 ## Worker Identification
 
