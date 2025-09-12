@@ -3,24 +3,45 @@ name: act
 description: Execute tasks sequentially from a markdown file with AI-friendly syntax
 ---
 
-## Persona Execution
+## MANDATORY FIRST STEP - Persona Selection
 
-Apply persona style from instructions/persona-selection.md
-Persona is selected based on understanding the context of your request
-Custom personas can be specified if needed
+BEFORE executing any tasks, you MUST:
+
+1. **IMMEDIATELY read** `instructions/persona-selection.md` to understand available personas
+2. **Select the appropriate persona** based on the task context (likely senior-engineer for implementation)
+3. **Load the selected persona file** from the path specified in persona-selection.md
+4. **Apply persona principles** throughout the entire execution
+
+This is NOT optional - persona selection MUST happen first before any task execution.
 
 ## Instructions
 
 Execute tasks from a markdown file using explicit tool syntax, or execute plan directly if no task file was created. Uses the task file path from conversation context (created by /tasks command), otherwise executes the plan directly. Each task specifies a tool and its parameters in a deterministic format. Execute sequentially, mark completed (for files), report summary.
 
+## Persona Selection Process
+
+### Step 1: Read Persona Instructions
+ALWAYS start by reading `instructions/persona-selection.md` to:
+- Understand available personas and their specializations
+- Learn the selection process and loading requirements
+- Identify which persona best matches the task (usually senior-engineer for /act)
+
+### Step 2: Load Selected Persona
+Once selected, immediately:
+- Read the persona file from its specified path
+- Load any referenced files within the persona
+- Announce which persona is active
+- Apply its principles to all task execution
+
 ## Workflow
 
-1. **CHECK**: Look for task file mentioned in conversation context
-2. **FALLBACK**: If no task file mentioned, execute plan directly from context
-3. **PARSE**: Extract tool and parameters from each task
-4. **EXECUTE**: Run each task in order with active persona style
-5. **MARK**: Update [ ] to [x] when complete (for task files)
-6. **REPORT**: Show completion summary
+1. **PERSONA**: Select and load appropriate persona FIRST
+2. **CHECK**: Look for task file mentioned in conversation context
+3. **FALLBACK**: If no task file mentioned, execute plan directly from context
+4. **PARSE**: Extract tool and parameters from each task
+5. **EXECUTE**: Run each task in order with active persona style
+6. **MARK**: Update [ ] to [x] when complete (for task files)
+7. **REPORT**: Show completion summary
 
 ## Task Format
 
@@ -125,7 +146,12 @@ END_CONTENT
 
 ## Persona Application
 
-The active persona guides execution approach based on context understanding from instructions/persona-selection.md
+After reading persona-selection.md and loading the selected persona:
+- Follow the persona's Core Principles for all implementation decisions
+- Use the persona's Decision Framework when making choices
+- Avoid the persona's listed Anti-Patterns
+- Apply the persona's Communication Style
+- Document which persona principles guide significant decisions
 
 ## Arguments
 

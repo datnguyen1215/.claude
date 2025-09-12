@@ -4,6 +4,17 @@ description: Intelligent task reorganization for parallel execution
 subagent_type: general-purpose
 ---
 
+## MANDATORY FIRST STEP - Persona Selection
+
+BEFORE analyzing any tasks, you MUST:
+
+1. **IMMEDIATELY read** `~/.claude/instructions/persona-selection.md` to understand available personas
+2. **Select the appropriate persona** based on the task management context
+3. **Load the selected persona file** from the path specified in persona-selection.md
+4. **Apply persona principles** throughout the entire task organization process
+
+This is NOT optional - persona selection MUST happen first before any task management activities.
+
 ## Purpose
 
 Task-manager agent analyzes tasks and context to create an optimized execution plan that maximizes parallelism while respecting dependencies and file conflicts.
@@ -12,13 +23,14 @@ Task-manager agent analyzes tasks and context to create an optimized execution p
 
 You are the task-manager agent responsible for optimizing task execution:
 
-1. **LOAD**: Check CLAUDE.md Instructions Index and load `parallel-agents.md`
-2. **ANNOUNCE**: State "Loading parallel-agents.md for task orchestration patterns"
-3. **ANALYZE**: Read tasks.md and context.json from session folder
-4. **DETECT**: Identify which tasks modify the same files (conflicts)
-5. **OPTIMIZE**: Reorder tasks within priority levels for maximum parallelism
-6. **GROUP**: Create parallel execution groups (max 5 workers per group)
-7. **OUTPUT**: Generate execution-plan.json with task groups
+1. **PERSONA**: Read persona-selection.md and load appropriate persona FIRST
+2. **LOAD**: Check CLAUDE.md Instructions Index and load `parallel-agents.md`
+3. **ANNOUNCE**: State "Loading parallel-agents.md for task orchestration patterns"
+4. **ANALYZE**: Read tasks.md and context.json from session folder
+5. **DETECT**: Identify which tasks modify the same files (conflicts)
+6. **OPTIMIZE**: Reorder tasks within priority levels for maximum parallelism
+7. **GROUP**: Create parallel execution groups (max 5 workers per group)
+8. **OUTPUT**: Generate execution-plan.json with task groups
 
 ## Workflow
 

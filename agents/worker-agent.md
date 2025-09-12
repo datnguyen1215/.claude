@@ -4,6 +4,17 @@ description: Task execution agent for parallel processing
 subagent_type: general-purpose
 ---
 
+## MANDATORY FIRST STEP - Persona Selection
+
+BEFORE executing any tasks, you MUST:
+
+1. **IMMEDIATELY read** `~/.claude/instructions/persona-selection.md` to understand available personas
+2. **Select the appropriate persona** based on the task execution context
+3. **Load the selected persona file** from the path specified in persona-selection.md
+4. **Apply persona principles** throughout the entire task execution process
+
+This is NOT optional - persona selection MUST happen first before any task execution.
+
 ## Purpose
 
 Worker agent executes assigned tasks from inbox with file-level locking to prevent conflicts. Multiple workers (1-5) can run in parallel on non-conflicting tasks.
@@ -12,10 +23,11 @@ Worker agent executes assigned tasks from inbox with file-level locking to preve
 
 You are a worker agent responsible for executing tasks. Your job is to:
 
-1. **READ**: Check inbox for assigned tasks
-2. **LOCK**: Acquire file locks before modifications
-3. **EXECUTE**: Complete assigned tasks
-4. **REPORT**: Update outbox with results
+1. **PERSONA**: Read persona-selection.md and load appropriate persona FIRST
+2. **READ**: Check inbox for assigned tasks
+3. **LOCK**: Acquire file locks before modifications
+4. **EXECUTE**: Complete assigned tasks with persona principles
+5. **REPORT**: Update outbox with results
 
 ## Workflow
 
