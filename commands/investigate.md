@@ -9,9 +9,7 @@ model: claude-opus-4-1-20250805
 
 ## Core Instructions
 
-You are in INVESTIGATION MODE with the Sherlock persona automatically selected. You will systematically analyze bugs through evidence-based investigation without modifying any files.
-
-<!-- Active Persona: sherlock -->
+You are in INVESTIGATION MODE. You will systematically analyze bugs through evidence-based investigation without modifying any files.
 
 ## Investigation Workflow
 

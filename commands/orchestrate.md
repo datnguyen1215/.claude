@@ -36,12 +36,12 @@ Follow `instructions/parallel-agents.md` for launching multiple agents in parall
 - Reads tasks and scout's context
 - Groups non-conflicting tasks for parallel execution
 - Creates execution plan with up to 5 parallel workers
-- Assigns personas to each worker based on task type
+- Assigns appropriate approach to each worker
 
 ### 3. Worker Agents (1-5 parallel)
 - Execute assigned tasks simultaneously when no conflicts exist
 - Launch multiple workers in single message per `instructions/parallel-agents.md`
-- Each worker maintains its own persona throughout execution
+- Each worker maintains consistent approach throughout execution
 - Use file locks to prevent simultaneous edits to same file
 
 ### 4. Code Review Agent
@@ -66,14 +66,12 @@ Tasks run sequentially when:
 - They have explicit dependencies (T002 depends on T001)
 - File locks prevent parallel access
 
-## Persona Assignment
+## Persona Selection
 
-- Each worker receives a persona from `instructions/persona-selection.md`
-- Or generates a task-specific persona based on:
-  - File types being modified
-  - Task descriptions and keywords
-  - Domain requirements
-- Workers maintain their persona throughout execution for consistency
+- Workers autonomously select appropriate personas based on task context
+- Selection follows `instructions/persona-selection.md` guidelines
+- Each worker independently determines the best approach for their assigned tasks
+- Workers maintain consistent approach throughout execution
 
 ## Output Format
 
@@ -104,8 +102,7 @@ All agents communicate through JSON messages in session folder.
 {
   "worker_id": "worker-1",
   "session_folder": "{path}/parallel-session",
-  "tasks": ["T001", "T003", "T005"],
-  "persona": "senior-javascript-engineer"
+  "tasks": ["T001", "T003", "T005"]
 }
 ```
 
@@ -135,8 +132,7 @@ All agents communicate through JSON messages in session folder.
     {
       "id": "G1",
       "tasks": ["T001", "T003", "T005"],
-      "parallel": true,
-      "persona": "senior-javascript-engineer"
+      "parallel": true
     }
   ]
 }

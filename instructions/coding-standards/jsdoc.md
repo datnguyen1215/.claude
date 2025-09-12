@@ -139,4 +139,4 @@ Define reusable types at file top:
 - Type checking with TypeScript JSDoc mode
 
 ### Reference
-This document complements `coding-standards-javascript.md` for complete JavaScript standards.
+This document complements `coding-standards/javascript.md` for complete JavaScript standards.
