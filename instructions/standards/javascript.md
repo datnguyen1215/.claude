@@ -141,7 +141,7 @@ const createUser = (name) => ({
 
 ### JSDoc Standards
 - **Required:** All functions and files must be documented
-- **Reference:** See `coding-standards/jsdoc.md` for detailed requirements
+- **Reference:** See `standards/jsdoc.md` for detailed requirements
 - **File Headers:** Every file must explain its purpose and module context
 - **Function Docs:** Parameters, returns, and throws must be documented
 - **Type Definitions:** Use @typedef for complex data structures

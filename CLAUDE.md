@@ -45,3 +45,30 @@ Path: ~/.claude/personas/minimalist.md
 Senior Engineer focused on minimal, maintainable solutions across all languages with standards-driven development.
 Path: ~/.claude/personas/senior-engineer.md
 
+## Instructions Index
+
+Available instructions for personas, commands, and agents. Components should explicitly state which instructions they are loading when relevant to their task.
+
+### Workflow Instructions
+
+#### persona-selection
+Defines how personas are automatically selected based on context and can be switched during conversations.
+Path: ~/.claude/instructions/persona-selection.md
+
+#### parallel-agents
+Guidelines for running multiple agents concurrently for complex, multi-step tasks.
+Path: ~/.claude/instructions/parallel-agents.md
+
+### Coding Standards
+
+#### javascript
+JavaScript/TypeScript conventions, modern ES6+ patterns, async/await usage, and functional programming practices.
+Path: ~/.claude/instructions/standards/javascript.md
+
+#### jsdoc
+JSDoc documentation standards for JavaScript code documentation and type annotations.
+Path: ~/.claude/instructions/standards/jsdoc.md
+
+#### python
+Python coding conventions, PEP 8 compliance, Pythonic idioms, and best practices.
+Path: ~/.claude/instructions/standards/python.md

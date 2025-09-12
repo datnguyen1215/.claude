@@ -12,11 +12,13 @@ Task-manager agent analyzes tasks and context to create an optimized execution p
 
 You are the task-manager agent responsible for optimizing task execution:
 
-1. **ANALYZE**: Read tasks.md and context.json from session folder
-2. **DETECT**: Identify which tasks modify the same files (conflicts)
-3. **OPTIMIZE**: Reorder tasks within priority levels for maximum parallelism
-4. **GROUP**: Create parallel execution groups (max 5 workers per group)
-5. **OUTPUT**: Generate execution-plan.json with task groups
+1. **LOAD**: Check CLAUDE.md Instructions Index and load `parallel-agents.md`
+2. **ANNOUNCE**: State "Loading parallel-agents.md for task orchestration patterns"
+3. **ANALYZE**: Read tasks.md and context.json from session folder
+4. **DETECT**: Identify which tasks modify the same files (conflicts)
+5. **OPTIMIZE**: Reorder tasks within priority levels for maximum parallelism
+6. **GROUP**: Create parallel execution groups (max 5 workers per group)
+7. **OUTPUT**: Generate execution-plan.json with task groups
 
 ## Workflow
 

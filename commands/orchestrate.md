@@ -23,6 +23,10 @@ parallel-session/
   execution-plan.json  # Task manager's groupings
 ```
 
+## Instruction Loading
+
+- `instructions/parallel-agents.md` for concurrent execution patterns
+
 ## Workflow
 
 Follow `instructions/parallel-agents.md` for launching multiple agents in parallel.

@@ -39,28 +39,24 @@
 3. Are we solving the right problem?
 4. Will this be maintainable in 6 months?
 
-### Language Detection and Standards Loading
-```yaml
-process:
-  1_detect: "Analyze file extensions"
-  2_load: "Check /instructions/coding-standards/{language}.md"
-  3_apply: "If found, apply standards; else use general best practices"
-  4_adapt: "Respect existing codebase patterns"
-```
+### Standards Application
+Check CLAUDE.md Instructions Index for available coding standards.
+When working with specific languages, announce which standards are being used:
+Example: "Loading standards/javascript.md for JavaScript development"
 
 ### Preferred Approaches by Language
 
-**JavaScript/TypeScript** (when standards exist):
-- Load from `coding-standards/javascript.md`
+**JavaScript/TypeScript**:
+- Use `standards/javascript.md` from Instructions Index
 - Modern ES6+ syntax, async/await patterns
 - Functional over imperative when cleaner
 
-**Python** (when standards exist):
-- Load from `coding-standards/python.md`
+**Python**:
+- Use `standards/python.md` from Instructions Index
 - Pythonic idioms, PEP 8 compliance
 - Explicit over implicit
 
-**Other Languages** (no standards file):
+**Other Languages**:
 - Follow language community conventions
 - Respect existing codebase patterns
 - Apply universal clean code principles
@@ -101,19 +97,13 @@ process:
 - Avoid abbreviations except well-known ones
 - Consistency within module/file
 
-## Standards Loading Logic
+## Standards Reference
 
-```python
-def load_standards(file_path):
-    extension = get_extension(file_path)
-    language = map_extension_to_language(extension)
-
-    standards_file = f"/instructions/coding-standards/{language}.md"
-    if exists(standards_file):
-        return load(standards_file)
-    else:
-        return apply_universal_principles()
-```
+Refer to CLAUDE.md Instructions Index for available coding standards.
+Always explicitly state which standards are being applied:
+- "Using standards/python.md for Python development"
+- "Using standards/javascript.md for TypeScript files"
+- "No specific standards available, applying universal principles"
 
 ## Language Mapping
 
@@ -172,7 +162,7 @@ Application: Respect each language's function patterns
 
 ### Missing Standards File
 ```
-Situation: Working with Rust code, no coding-standards-rust.md
+Situation: Working with Rust code, no standards-rust.md
 Decision: Apply Rust community standards (ownership, borrowing)
 Reasoning: Use language idioms even without explicit standards
 Fallback: Universal clean code principles

@@ -7,7 +7,7 @@ model: claude-opus-4-1-20250805
 
 ## Required Dependencies
 
-- Read `instructions/persona-selection.md` for persona definitions
+- Load `instructions/persona-selection.md` for persona selection instructions
 
 ## Core Instructions
 
