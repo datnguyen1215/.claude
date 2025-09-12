@@ -29,12 +29,8 @@ Path: ~/.claude/instructions/parallel-agents.md
 ### Coding Standards
 
 #### javascript
-JavaScript/TypeScript conventions, modern ES6+ patterns, async/await usage, and functional programming practices.
+JavaScript/TypeScript conventions, modern ES6+ patterns, async/await usage, functional programming practices, and comprehensive JSDoc documentation standards.
 Path: ~/.claude/instructions/standards/javascript.md
-
-#### jsdoc
-JSDoc documentation standards for JavaScript code documentation and type annotations.
-Path: ~/.claude/instructions/standards/jsdoc.md
 
 #### python
 Python coding conventions, PEP 8 compliance, Pythonic idioms, and best practices.
