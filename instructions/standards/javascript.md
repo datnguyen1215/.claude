@@ -1,11 +1,13 @@
 # JavaScript Coding Standards
 
 ## Purpose
+
 Technical standards and best practices for JavaScript projects. These standards focus on measurable quality metrics and proven patterns.
 
 ## Language Requirements
 
 ### Modern JavaScript (ES6+)
+
 - **Required:** Use ES6+ features unless project uses CommonJS
 - **Const/Let:** Never use `var`, prefer `const` over `let`
 - **Arrow Functions:** For callbacks and simple functions
@@ -14,6 +16,7 @@ Technical standards and best practices for JavaScript projects. These standards 
 - **Spread/Rest:** For array/object operations
 
 ### Async Patterns
+
 - **Always:** Use async/await for asynchronous operations
 - **Never:** Nested callbacks or long promise chains
 - **Error Handling:** Try-catch blocks for async operations
@@ -22,6 +25,7 @@ Technical standards and best practices for JavaScript projects. These standards 
 ## Functional Programming Principles
 
 ### Core Principles
+
 - **Pure Functions:** Default approach for all functions
 - **Immutability:** Never mutate data, create new copies
 - **Composition:** Build complex behavior from simple functions
@@ -29,6 +33,7 @@ Technical standards and best practices for JavaScript projects. These standards 
 - **Declarative:** Describe what, not how
 
 ### Function Patterns
+
 - **Higher-Order Functions:** Functions that accept/return functions
 - **Currying:** Break down multi-argument functions
 - **Partial Application:** Pre-fill function arguments
@@ -36,6 +41,7 @@ Technical standards and best practices for JavaScript projects. These standards 
 - **Pipe/Compose:** Chain operations declaratively
 
 ### Immutability Rules
+
 - **Objects:** Use spread operator or Object.assign for updates
 - **Arrays:** Use map, filter, reduce instead of mutations
 - **Never:** Use push, pop, splice, shift, unshift directly
@@ -43,37 +49,63 @@ Technical standards and best practices for JavaScript projects. These standards 
 - **Libraries:** Consider Immutable.js or Immer for complex cases
 
 ### Composition Patterns
+
 ```javascript
 // Prefer composition
-const withLogging = (fn) => (...args) => {
-  const result = fn(...args);
-  console.log(result);
-  return result;
-};
+const withLogging =
+  (fn) =>
+  (...args) => {
+    const result = fn(...args);
+    console.log(result);
+    return result;
+  };
 
 // Over classes
 const createUser = (name) => ({
   name,
-  greet: () => `Hello, ${name}`
+  greet: () => `Hello, ${name}`,
 });
 ```
 
 ## Code Structure Limits
 
 ### Function Metrics
+
 - **Length:** Maximum 30 lines (warn at 20)
 - **Parameters:** Maximum 3 (use object destructuring for more)
 - **Complexity:** Cyclomatic complexity < 10
 - **Nesting:** Maximum 3 levels deep
 - **Return Points:** Prefer single return or early returns
 
+### Control Flow Formatting
+
+- **Single Statements:** Omit curly braces for single-statement if/else/for/while
+- **Multiple Statements:** Always use braces for multiple statements
+- **Nested Conditions:** Always use braces when nesting to maintain clarity
+- **Line Length:** Keep single-statement conditions on one line if under 80 chars
+- **Examples:**
+
+  ```javascript
+  // Good - single statement, no braces
+  if (!value) throw new Error("Value required");
+  if (isValid) return true;
+
+  // Good - multiple statements, use braces
+  if (error) {
+    logger.error(error);
+    throw error;
+  }
+  ```
+
 ### File Metrics
+
 - **Length:** Maximum 150 lines (warn at 100)
 - **Exports:** One primary export per file
 - **Imports:** Group and order consistently
 - **Dependencies:** Justify each external dependency
 
 ### When Classes Are Justified
+
 - **Framework Requirements:** When framework demands classes (rare)
 - **Performance:** Proven performance benefit (measured)
 - **External APIs:** When interfacing with class-based libraries
@@ -83,6 +115,7 @@ const createUser = (name) => ({
 ## Naming Conventions
 
 ### Variables and Functions
+
 - **Variables:** camelCase, descriptive (minimum 3 characters)
 - **Constants:** UPPER_SNAKE_CASE for true constants
 - **Functions:** verbNoun pattern (e.g., `getUserData`)
@@ -90,6 +123,7 @@ const createUser = (name) => ({
 - **Arrays:** Plural nouns (e.g., `users`, `items`)
 
 ### Files and Directories
+
 - **Files:** kebab-case for files (e.g., `user-service.js`)
 - **Components:** PascalCase for React/Vue components
 - **Tests:** `.test.js` or `.spec.js` suffix
@@ -98,6 +132,7 @@ const createUser = (name) => ({
 ## Common Anti-Patterns
 
 ### Code Smells to Flag
+
 - **God Functions:** Functions doing multiple unrelated things
 - **Deep Nesting:** More than 3 levels of nesting
 - **Magic Numbers:** Hardcoded values without named constants
@@ -106,6 +141,7 @@ const createUser = (name) => ({
 - **Console Logs:** Left in production code
 
 ### JavaScript-Specific Issues
+
 - **Type Coercion:** Implicit type conversions
 - **Global Variables:** Polluting global scope
 - **Mutable Operations:** Any mutation of objects/arrays (critical anti-pattern)
@@ -115,36 +151,16 @@ const createUser = (name) => ({
 - **Synchronous Operations:** Blocking I/O in Node.js
 - **Memory Leaks:** Uncleaned event listeners, timers
 
-## Framework Guidelines
-
-### React Patterns
-- **Components:** Functional components only (no class components)
-- **State:** useState, useReducer with immutable updates
-- **Props:** Pure functions of props to JSX
-- **Effects:** Minimize useEffect, prefer derived state
-- **Composition:** Custom hooks for logic reuse
-
-### Node.js Patterns
-- **Modules:** Pure function exports
-- **Middleware:** Functional composition pattern
-- **Data Processing:** Stream transformations
-- **Error Handling:** Functional error handling (Result/Either pattern)
-- **No Classes:** Use factory functions for instances
-
-### Vue Patterns
-- **Composition API:** Always use over Options API
-- **Composables:** Pure functions returning reactive state
-- **Computed:** Prefer computed over watchers
-- **Components:** Functional where possible
-
 ## Documentation Requirements
 
 ### Purpose
+
 AI-friendly documentation requirements for JavaScript projects. Focused on machine-readable, parseable documentation without verbose examples.
 
 ### File Documentation
 
 #### Required File Header
+
 Every JavaScript file must start with a module description:
 
 ```javascript
@@ -156,6 +172,7 @@ Every JavaScript file must start with a module description:
 ### Function Documentation
 
 #### Required Elements
+
 Every function must include, even inner/private ones:
 
 ```javascript
@@ -168,6 +185,7 @@ Every function must include, even inner/private ones:
 ```
 
 #### Documentation Rules
+
 - **Brevity:** One-line descriptions preferred
 - **No Examples:** Don't include code examples in comments
 - **Type Accuracy:** Use correct JavaScript types
@@ -177,6 +195,7 @@ Every function must include, even inner/private ones:
 ### Type Definitions
 
 #### Complex Types
+
 Define reusable types at file top:
 
 ```javascript
@@ -189,6 +208,7 @@ Define reusable types at file top:
 ```
 
 #### Common Type Patterns
+
 - **Arrays:** `{Array<string>}` or `{string[]}`
 - **Objects:** `{Object}` or custom `@typedef`
 - **Functions:** `{Function}` or `{(param: type) => returnType}`
@@ -199,6 +219,7 @@ Define reusable types at file top:
 ### Class Documentation
 
 #### Class Header
+
 ```javascript
 /**
  * Brief class description
@@ -208,6 +229,7 @@ Define reusable types at file top:
 ```
 
 #### Constructor and Methods
+
 ```javascript
 /**
  * @constructor
@@ -225,6 +247,7 @@ Define reusable types at file top:
 ### Special Tags
 
 #### Priority Tags
+
 - **@deprecated** - Mark obsolete code
 - **@since** - Version when added
 - **@todo** - Pending improvements
@@ -234,6 +257,7 @@ Define reusable types at file top:
 - **@override** - Overridden methods
 
 #### Access Modifiers
+
 - **@public** - Public API
 - **@private** - Internal use only
 - **@protected** - Subclass access
@@ -242,6 +266,7 @@ Define reusable types at file top:
 ### AI-Friendly Patterns
 
 #### Machine Parsing
+
 - Use consistent tag order
 - Always include types in braces
 - Keep descriptions on same line as tag
@@ -249,6 +274,7 @@ Define reusable types at file top:
 - Avoid custom or framework-specific tags
 
 #### Structured Data
+
 - Define all data structures with @typedef
 - Use consistent naming for types
 - Document all object properties
@@ -257,6 +283,7 @@ Define reusable types at file top:
 ### Validation Rules
 
 #### Must Document
+
 - All exported functions
 - All public class methods
 - All module files
@@ -264,6 +291,7 @@ Define reusable types at file top:
 - Error conditions
 
 #### Optional Documentation
+
 - Private helper functions under 5 lines
 - Simple getters/setters
 - Obvious utility functions
@@ -272,6 +300,7 @@ Define reusable types at file top:
 ### Integration
 
 #### Tooling Compatibility
+
 - Compatible with JSDoc parser
 - VS Code IntelliSense support
 - Documentation generation ready
@@ -280,6 +309,7 @@ Define reusable types at file top:
 ## Performance Considerations
 
 ### Memory Management
+
 - **Cleanup:** Remove listeners, clear timers
 - **References:** Avoid circular references
 - **Closures:** Be aware of closure scope
@@ -288,6 +318,7 @@ Define reusable types at file top:
 ## Error Handling
 
 ### Error Patterns
+
 - **Specific Errors:** Create custom error classes
 - **Error Messages:** Descriptive and actionable
 - **Logging:** Log errors with context
@@ -297,6 +328,7 @@ Define reusable types at file top:
 ## Security Requirements
 
 ### Input Validation
+
 - **Always Validate:** Never trust user input
 - **Sanitization:** Clean data before use
 - **Parameterization:** Use parameterized queries
@@ -304,6 +336,7 @@ Define reusable types at file top:
 - **Authorization:** Check permissions
 
 ### Common Vulnerabilities
+
 - **XSS:** Escape output, use CSP
 - **Injection:** Parameterize all queries
 - **CSRF:** Use tokens for state changes
@@ -313,6 +346,7 @@ Define reusable types at file top:
 ## Code Review Checklist
 
 ### Must Fix (Critical)
+
 - [ ] Functions over 30 lines
 - [ ] Files over 150 lines
 - [ ] Nested callbacks or promise chains
@@ -323,6 +357,7 @@ Define reusable types at file top:
 - [ ] Side effects in pure functions
 
 ### Should Fix (Important)
+
 - [ ] Functions over 20 lines
 - [ ] More than 3 parameters
 - [ ] Deep nesting (>3 levels)
@@ -333,15 +368,18 @@ Define reusable types at file top:
 - [ ] Stateful operations
 
 ### Consider Fixing (Suggested)
+
 - [ ] Complex conditionals
 - [ ] Missing tests for critical paths
 - [ ] Inconsistent naming
 - [ ] Performance optimizations
 - [ ] Additional documentation
+- [ ] Unnecessary braces on single-statement conditions
 
 ## Exceptions
 
 Justified complexity is acceptable when:
+
 - Required by external APIs
 - Significant performance improvement (measured)
 - Framework requirements
