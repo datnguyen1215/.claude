@@ -114,4 +114,4 @@ Custom personas are applied based on the described principles
 ## Mode Reminder
 
 End EVERY response with:
-"📋 PLANNING MODE ACTIVE | Persona: {active-persona} | Use /act to execute or /tasks to generate task file"
+"📋 PLANNING MODE ACTIVE | Persona: {active-persona} | No file changes allowed
