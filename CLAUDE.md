@@ -19,19 +19,28 @@ Available instructions for personas, commands, and agents. Components should exp
 ### Workflow Instructions
 
 #### persona-selection
+
 Complete persona index with descriptions, paths, and instructions for automatic selection and loading.
 Path: ~/.claude/instructions/persona-selection.md
 
 #### parallel-agents
+
 Guidelines for running multiple agents concurrently for complex, multi-step tasks.
 Path: ~/.claude/instructions/parallel-agents.md
 
 ### Coding Standards
 
 #### javascript
+
 JavaScript/TypeScript conventions, modern ES6+ patterns, async/await usage, functional programming practices, and comprehensive JSDoc documentation standards.
 Path: ~/.claude/instructions/standards/javascript.md
 
 #### python
+
 Python coding conventions, PEP 8 compliance, Pythonic idioms, and best practices.
 Path: ~/.claude/instructions/standards/python.md
+
+#### svelte
+
+Svelte 5 standards prioritizing runes syntax, fine-grained reactivity, deprecated features guidance, and SvelteKit navigation patterns.
+Path: ~/.claude/instructions/standards/svelte.md
