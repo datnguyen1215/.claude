@@ -1,299 +1,212 @@
 ---
 title: Svelte 5 Coding Standards
 type: technical_specification
-version: 1.0.0
+version: 2.0.0
 tags: [svelte, svelte5, runes, reactive, components]
+last_updated: 2025-09-13
+target_audience: [ai_agents, developers]
 ---
 
 # Svelte 5 Coding Standards
 
-## Purpose
+## Overview
 
-Technical standards for Svelte 5 projects prioritizing modern runes syntax, fine-grained reactivity, and compile-time optimizations.
+Mandatory standards for Svelte 5 using runes syntax. All deprecated Svelte 4 patterns are forbidden.
 
-## Framework Requirements
+## Core Requirements
 
-### Svelte 5 Runes (Required)
+### Mandatory Runes Usage
 
-- **$state:** Use for all reactive state declarations
-- **$derived:** Use for computed values from state
-- **$effect:** Use for side effects and lifecycle management
-- **$props:** Use for component property definitions with destructuring
-- **$bindable:** Use for two-way bindable props when needed
-- **$inspect:** Use only during development for debugging
-
-### Runes Syntax Rules
-
-#### State Management
+**State & Reactivity:**
 
 - Always use `$state()` for reactive variables
-- Never use plain `let` declarations for reactive data
-- Use `$derived()` for computed values instead of reactive statements
-- Initialize state with appropriate default values
-- Keep state granular for fine-grained reactivity
+- Always use `$derived()` for computed values
+- Always use `$effect()` for side effects with cleanup returns
+- Use `$effect.pre()` for pre-DOM operations
+- Never use plain `let` for reactive data
+- Never use `$:` reactive statements
 
-#### Component Props
+**Component Props:**
 
-- Always use `$props()` with destructuring syntax
-- Define default values inline during destructuring
-- Use rest syntax to capture additional props
-- Mark two-way bindable props with `$bindable()`
-- Never use `export let` syntax (deprecated in Svelte 5)
+- Always use `$props()` with destructuring
+- Define defaults inline: `const { prop = defaultValue } = $props()`
+- Use rest syntax for additional props: `const { ...rest } = $props()`
+- Mark two-way bindable with `$bindable()`
+- Never use `export let` syntax
 
-#### Effects and Lifecycle
+**Development Only:**
 
-- Use `$effect()` for all side effects
-- Always return cleanup functions from effects when needed
-- Use `$effect.pre()` for operations before DOM updates
-- Replace all `$:` reactive statements with appropriate runes
-- Handle subscriptions and listeners within effects
+- Use `$inspect()` only in development environment
 
-## Deprecated Svelte 5 Features
+### Event Handling
 
-### Required Migrations
+**Required Syntax:**
 
-#### Event Dispatching
+- Always use lowercase HTML attributes: `onclick`, `onsubmit`, `oninput`
+- Never use `on:` directive: ~~`on:click`~~
+- Never use camelCase: ~~`onClick`~~
+- Never use event modifiers: ~~`|preventDefault`~~
 
-- Never use `createEventDispatcher`
-- Always use callback props for parent communication
-- Pass functions as props with optional chaining for safety
+**Event Modifiers:**
 
-#### Reactive Statements
+- Implement as wrapper functions (preventDefault, stopPropagation, once)
+- Chain modifiers through function composition
 
-- Never use `$:` for reactive declarations
-- Replace reactive statements with `$effect()` for side effects
-- Replace reactive assignments with `$derived()` for computed values
+**Component Communication:**
 
-#### Store Subscriptions
+- Use callback props instead of `createEventDispatcher`
+- Pass functions as props with optional chaining
 
-- Never use auto-subscription syntax with `$` prefix
-- Use explicit subscriptions within `$effect()`
-- Consider converting stores to runes-based state
-- Always clean up subscriptions in effect return functions
+## Deprecated Patterns (Never Use)
 
-#### Rest Props
+### Svelte 4 Syntax
 
-- Never use `$$props` or `$$restProps`
-- Use destructuring with rest syntax in `$props()`
-- Access all props through the destructured object
+- `export let` for props
+- `$:` reactive statements
+- `on:` event directives
+- Event modifiers (`|preventDefault`, `|stopPropagation`)
+- `createEventDispatcher`
+- `$$props`, `$$restProps`
+- Store auto-subscriptions with `$` prefix
+- Plain `let` for reactive values
+- `<slot />` elements - use snippets instead
 
-## Component Structure
+## Implementation Guidelines
 
-### File Organization Order
+### Component Structure Order
 
-1. Script context="module" section (if needed)
-   - Static exports and prerender settings
-   - Type definitions and constants
+1. `<script context="module">` - Static exports, types
+2. `<script>` - Imports, props, state, derived, effects, handlers
+3. Template markup - HTML with conditionals and loops
+4. `<style>` - Scoped styles
 
-2. Script section with runes
-   - Import statements
-   - Props destructuring with `$props()`
-   - State declarations with `$state()`
-   - Derived values with `$derived()`
-   - Effects with `$effect()`
-   - Event handler functions
+### State & Reactivity
 
-3. Template markup
-   - Semantic HTML structure
-   - Proper conditional rendering
-   - Keyed each blocks
+**Principles:**
 
-4. Style section
-   - Scoped styles by default
-   - Minimal use of `:global()`
+- Keep state granular for fine-grained updates
+- Use state classes (`.svelte.js`) for complex shared state
+- Place `$derived()` close to dependencies
+- Minimize effect dependencies
+- Always return cleanup from effects
 
-### Component Patterns
+**State Classes:**
 
-#### Snippets (Svelte 5 Feature)
+- Define with `$state()` properties
+- Include `$derived()` getters
+- Export instances for sharing
 
-- Use snippets for reusable template fragments
-- Define with `{#snippet name(params)}`
-- Render with `{@render snippet()}`
-- Pass snippets as props to child components
+### Navigation (SvelteKit)
 
-#### Conditional Rendering
+**Required Imports:**
 
-- Use `{#if}` blocks for complex conditions
-- Use ternary operators for simple inline conditionals
-- Always include `{:else}` blocks when appropriate
-- Avoid nested conditionals beyond 2 levels
+- `import { goto, beforeNavigate, preloadData, invalidate } from '$app/navigation'`
+- `import { page } from '$app/stores'`
 
-## Page Navigation
+**Usage:**
 
-### SvelteKit Navigation Rules
+- Programmatic: `goto(url)`
+- Guards: `beforeNavigate(callback)`
+- Data refresh: `invalidate(url)`
+- Access params: `$page.params`
+- Access URL: `$page.url`
 
-- Import navigation functions from `$app/navigation`
-- Use `goto()` for programmatic navigation
-- Implement `beforeNavigate` for navigation guards
-- Use `preloadData()` for performance optimization
-- Access page data through `$page` store with `$derived()`
+### Template Patterns
 
-### Route Management
+**Snippets:**
 
-- Access route params through `$page.params`
-- Use `$page.url` for URL information
-- Implement proper loading states during navigation
-- Handle navigation errors gracefully
-- Use `invalidate()` for data refresh
+- Define: `{#snippet name(params)}`
+- Render: `{@render snippet()}`
+- Pass as props to child components
 
-### Navigation Guards
+**Conditionals:**
 
-- Implement guards in layout or page components
-- Use `beforeNavigate` hook for prevention logic
-- Clean up guard subscriptions in effect returns
-- Check for unsaved changes before navigation
-- Provide user feedback for blocked navigation
+- Complex: `{#if}` blocks
+- Simple: Ternary operators
+- Max nesting: 2 levels
 
-## Reactivity Patterns
+**Loops:**
 
-### State Management Principles
+- Always keyed: `{#each items as item (item.id)}`
 
-- Prefer granular state over monolithic objects
-- Use state classes with runes for complex state
-- Share state through `.svelte.js` modules
-- Keep derived values close to their dependencies
-- Avoid deep nesting of reactive structures
+### Styling
 
-### State Classes (Svelte 5)
+**Rules:**
 
-- Define classes with `$state()` properties
-- Include `$derived()` getters for computed values
-- Implement methods for state mutations
-- Export instances for shared state
-- Use TypeScript for type safety
+- Styles scoped by default
+- Use `:global()` sparingly with documentation
+- Apply classes to HTML wrappers, not components
+- Use `class:` directive for conditionals
+- Use `style:` directive for CSS variables
+- Avoid inline styles except dynamic values
 
-### Performance Optimization
+### Performance
 
-- Use `$derived.by()` for expensive computations
-- Implement lazy loading for heavy components
+**Required:**
+
 - Always use keyed `{#each}` blocks
+- Use `$derived.by()` for expensive computations
 - Minimize effect dependencies
 - Batch state updates when possible
 
-## Styling Conventions
+### Build Configuration
 
-### Scoped Styles Rules
+**svelte.config.js:**
 
-- Styles are scoped by default - leverage this
-- Use `:global()` sparingly and document why
-- Prefer component-scoped styles over global CSS
-- Use CSS custom properties for theming
-- Keep styles co-located with components
+- Enable `runes: true`
+- Configure appropriate compiler options
+- Set TypeScript configuration
 
-### Dynamic Styling
+### Security
 
-- Use `class:` directive for conditional classes
-- Use `style:` directive for CSS custom properties
-- Avoid inline styles except for truly dynamic values
-- Prefer CSS classes over style attributes
-- Use consistent naming conventions for classes
-
-## Build Configuration
-
-### Compiler Options
-
-- Enable `runes: true` in svelte.config.js
-- Set appropriate dev/production settings
-- Configure CSS extraction strategy
-- Enable immutable optimizations when applicable
-- Use proper TypeScript configuration
-
-### Testing Requirements
-
-- Test components with @testing-library/svelte
-- Test reactive state behavior
-- Verify prop handling and validation
-- Test navigation and routing logic
-- Include accessibility testing
-
-## Security Patterns
-
-### HTML Safety
+**HTML Safety:**
 
 - Never use `{@html}` with untrusted content
-- Sanitize user input before rendering
-- Use DOMPurify or similar for HTML sanitization
-- Validate and escape dynamic content
-- Implement Content Security Policy
+- Sanitize with DOMPurify before rendering
+- Validate all dynamic content
 
-### Props Validation
+**Props Validation:**
 
-- Validate props in effects or derived values
-- Use TypeScript for compile-time type checking
-- Throw errors for invalid prop combinations
-- Document prop constraints clearly
-- Handle edge cases gracefully
+- Use TypeScript interfaces
+- Validate in effects or derived
+- Handle invalid combinations
 
-## Code Review Checklist
+## Validation Checklist
 
-### Critical (Must Fix)
+### Critical Requirements
 
-- Using deprecated Svelte 4 syntax patterns
-- Missing runes for reactive state management
-- Unkeyed each blocks in lists
-- Raw HTML rendering without sanitization
-- Store auto-subscriptions with $ prefix
-- Using createEventDispatcher for events
-- Memory leaks from uncleared effects
+- [ ] All reactive state uses `$state()`
+- [ ] All computed values use `$derived()`
+- [ ] All side effects use `$effect()` with cleanup
+- [ ] All props use `$props()` with destructuring
+- [ ] All events use lowercase HTML attributes
+- [ ] All `{#each}` blocks have keys
+- [ ] No deprecated Svelte 4 syntax present
+- [ ] No `{@html}` with untrusted content
+- [ ] Classes applied to HTML elements, not components
 
-### Important (Should Fix)
+### Code Quality
 
-- Components exceeding 200 lines
-- Monolithic state objects instead of granular state
-- Missing TypeScript type definitions
-- Inline event handlers over 3 lines
-- Global styles without clear justification
-- Missing component props validation
-- Synchronous operations blocking UI
+- [ ] Components under 200 lines
+- [ ] State is granular, not monolithic
+- [ ] TypeScript types defined
+- [ ] Event handlers under 3 lines
 
-### Suggested (Consider)
+### TypeScript
 
-- Extract reusable template snippets
-- Optimize expensive computations with $derived.by
-- Add error boundaries for resilience
-- Implement smooth page transitions
-- Add comprehensive loading states
-- Include ARIA attributes for accessibility
-- Document complex state logic
+**Requirements:**
 
-## TypeScript Integration
-
-### Type Requirements
-
-- Define Props interfaces for all components
-- Use generic components where appropriate
-- Type all exported functions and constants
-- Implement proper discriminated unions
-- Avoid `any` type - use `unknown` if needed
-
-## Common Anti-Patterns
-
-### Svelte 5 Specific
-
-- Using `$:` reactive statements instead of runes
-- Manual store subscriptions without cleanup
-- Direct mutation of $state arrays/objects
-- Event dispatching instead of callback props
-- Using $$props or $$restProps for prop access
-- Regular let declarations for reactive values
-- Missing cleanup in effects
-
-### Performance Issues
-
-- Unkeyed each blocks causing re-renders
-- Large monolithic components
-- Synchronous imports instead of dynamic
-- Unnecessary effect dependencies
-- Deep reactive object nesting
-- Missing memoization for expensive operations
+- Define Props interfaces
+- Use generic components when needed
+- Type all exports
+- Never use `any` (use `unknown` instead)
 
 ## Exceptions
 
-Older patterns acceptable only when:
+Deprecated patterns allowed only for:
 
-- Migrating large Svelte 4 codebases incrementally
-- Third-party component compatibility requirements
-- Specific measured performance requirements
+- Incremental Svelte 4 migration
+- Third-party compatibility
 - Documented framework limitations
 
-Always document exception rationale with comments.
+Always comment exception rationale.
