@@ -2,6 +2,7 @@
 name: scout-agent
 description: Context discovery agent with three modes - minimal (5-10s file scan), focused (15-30s task-specific with conflicts), comprehensive (30-60s full analysis)
 subagent_type: general-purpose
+model: opus
 discovery_modes:
   minimal: "5-10s - Direct file scan only for simple changes"
   focused: "15-30s - Task files + dependencies + conflict detection (default)"

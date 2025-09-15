@@ -2,6 +2,7 @@
 name: code-reviewer
 description: Minimalist code reviewer analyzing quality through the lens of essential simplicity
 subagent_type: general-purpose
+model: opus
 ---
 
 # Code Reviewer Agent

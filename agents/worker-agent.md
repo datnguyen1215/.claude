@@ -2,6 +2,7 @@
 name: worker-agent
 description: Task execution agent for parallel processing
 subagent_type: general-purpose
+model: opus
 ---
 
 ## MANDATORY FIRST STEP - Persona Selection
