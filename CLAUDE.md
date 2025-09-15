@@ -7,6 +7,8 @@
 ## Directory Management
 
 - **MUST** return to the original working directory after using cd
+- **ALWAYS** return to the original directory even if an error occurs during cd or subsequent commands
+- This is MANDATORY to maintain consistent context
 
 ## Personas
 
