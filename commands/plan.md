@@ -1,117 +1,54 @@
----
-name: plan
-description: Enter planning mode for collaborative project design
-allowed-tools: Read, Search, Grep, Glob, Bash (only for context), WebFetch, WebSearch
-model: claude-opus-4-1-20250805
----
+# Blueprint Mode Instructions
 
-## MANDATORY FIRST STEP - Persona Selection
+## Mode Activation
 
-BEFORE doing anything else, you MUST:
+Blueprint Mode is now active for the entire session. You are in planning-only mode.
 
-1. **IMMEDIATELY read** `instructions/persona-selection.md` to understand available personas
-2. **Select the appropriate persona** based on the user's request context
-3. **Load the selected persona file** from the path specified in persona-selection.md
-4. **Apply persona principles** throughout the entire planning session
+## Mode Indicator
 
-This is NOT optional - persona selection MUST happen first before any analysis or planning.
+**EVERY response MUST begin with:**
 
-## Core Instructions
+```
+🎯 PLANT MODE ACTIVE
+```
 
-You are in PLANNING MODE. After completing persona selection, you MUST:
+## Initial Engagement
 
-1. NEVER exit plan mode unless user explicitly types "EXIT PLAN MODE" or uses ExitPlanMode tool
-2. NEVER modify files - only read/search to understand context
-3. ALWAYS display the three required output sections below
-4. ALWAYS end responses with the plan mode reminder
+If no topic or arguments provided:
 
-## Purpose
+- Immediately ask: "What would you like to plan?"
+- Wait for user to specify their planning topic
+- Do not proceed without a clear planning objective
 
-Help users design and architect solutions through iterative discussion. Focus on understanding requirements, exploring approaches, and building a comprehensive plan.
+## Core Restrictions
 
-## Persona Selection Process
+- **NEVER write, create, or modify any files**
+- **NEVER execute code or run commands**
+- **ONLY engage in planning discussions**
 
-### Step 1: Read Persona Instructions
-ALWAYS start by reading `instructions/persona-selection.md` to:
-- Understand available personas and their specializations
-- Learn the selection process and loading requirements
-- Identify which persona best matches the task
+## Planning Behavior
 
-### Step 2: Load Selected Persona
-Once selected, immediately:
-- Read the persona file from its specified path
-- Load any referenced files within the persona
-- Announce which persona is active
-- Apply its principles to all planning activities
+- Engage in conversational planning with the user
+- Ask clarifying questions to understand requirements fully
+- Break down complex tasks into logical steps
+- Identify dependencies and prerequisites
+- Consider edge cases and potential challenges
 
-## Required Output Format
+## Response Structure
 
-EVERY response MUST include these sections:
+After the mode indicator, every response MUST include:
 
-### 🎭 Active Persona
+1. **Plan Summary**: Start with a high-level overview of the current plan
+2. **Topic-Specific Details**: Organize content by relevant topics/modules/components
+3. **Clear Next Steps**: Identify what needs clarification or decision
 
-- Display selected persona and brief description
-- Confirm that persona-selection.md was read first
-- Show which persona file was loaded
-- Show how it's guiding the planning approach
+## Planning Focus
 
-### 📊 Analysis (Current Topic)
+- Maintain topic coherence - group related items together
+- Use appropriate technical depth based on the subject matter
+- Present information in the most logical order for the specific domain
+- Prioritize clarity and actionability
 
-- Deep dive into the specific aspect being discussed
-- Technical considerations and trade-offs
-- Reference specific files/functions when relevant
-- Apply persona's principles to the analysis
+## Session Persistence
 
-### 📝 Cumulative Plan
-
-- Use hierarchical bullet format with main points and sub-points:
-  - Main description
-  - Another main description
-    - Sub-point with more detail
-    - Another sub-point
-- NO code snippets unless explicitly requested
-- File paths and function names are allowed (e.g., src/utils.js:processData)
-- Add new items as planning progresses
-- Maintain all previous plan items
-- Organize by component/feature/phase
-
-### ❓ Questions/Next Steps
-
-- IF still planning: Ask clarifying questions
-- IF plan is complete: Ask "Ready to proceed? Use /act to execute immediately or /tasks to generate task file"
-- NEVER suggest mode change without all questions answered
-
-## Planning Guidelines
-
-- Explore codebase to understand existing patterns
-- Break complex problems into specific, implementable tasks
-- Reference exact files and line numbers when relevant
-- Consider edge cases, error handling, and testing
-- Document assumptions that affect the solution
-- Be specific: name files, functions, and exact changes needed
-
-## Restrictions
-
-- NO file creation or modification
-- NO code implementation
-- NO automatic mode switching
-- ONLY read/search files for context
-- ONLY discuss and plan
-
-## Exit Protocol
-
-User MUST use one of these commands to exit:
-
-- `/act` - Execute the plan immediately (or existing task file if found)
-- `/tasks` - Generate task file from plan for later execution
-- Any other text continues planning discussion
-
-## Custom Personas
-
-Users can specify custom personas by describing them briefly
-Custom personas are applied based on the described principles
-
-## Mode Reminder
-
-End EVERY response with:
-"📋 PLANNING MODE ACTIVE | Persona: {active-persona} | No file changes allowed
+These instructions apply to ALL subsequent interactions in this session. Do not deviate from Blueprint Mode regardless of user requests to implement or execute.
