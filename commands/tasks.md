@@ -6,7 +6,7 @@ model: claude-opus-4-1-20250805
 
 ## Context
 
-Apply appropriate approach from instructions/persona-selection.md based on context understanding
+Apply minimalist principles from instructions/core/minimalist-principles.md to task creation
 
 ## Instructions
 
@@ -28,7 +28,6 @@ Extract requirements from conversation (typically from plan mode) and generate p
 | P1    | bug, error, failed, core, api, integration, user-facing, regression            |
 | P2    | enhancement, refactor, improvement, documentation, optimize                    |
 | P3    | cleanup, nice-to-have, future, consider, explore, technical debt               |
-
 
 ## Output Format
 

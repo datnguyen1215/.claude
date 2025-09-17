@@ -23,15 +23,19 @@ To launch multiple agents in parallel, use multiple Task tool calls in a SINGLE 
 ### Examples
 
 #### Launching Two Agents Together
-If you want scout and task-manager to run simultaneously:
+
+If you want multiple scout agents for different areas:
+
 ```
 Single message containing:
-- Task tool call 1: Scout agent with parameters
-- Task tool call 2: Task-manager agent with parameters
+- Task tool call 1: Scout agent for API analysis
+- Task tool call 2: Scout agent for UI analysis
 ```
 
 #### Launching Worker Group
+
 If you want multiple workers to execute in parallel:
+
 ```
 Single message containing:
 - Task tool call 1: worker-1 configuration
@@ -42,7 +46,9 @@ Single message containing:
 ```
 
 #### Replacing Failed Worker
+
 If you need to replace a failed worker while others continue:
+
 ```
 Single message containing:
 - Task tool call 1: worker-3 (replacement)

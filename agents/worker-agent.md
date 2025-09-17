@@ -5,16 +5,14 @@ subagent_type: general-purpose
 model: opus
 ---
 
-## MANDATORY FIRST STEP - Persona Selection
+## MANDATORY FIRST STEP - Load Core Instructions
 
 BEFORE executing any tasks, you MUST:
 
-1. **IMMEDIATELY read** `~/.claude/instructions/persona-selection.md` to understand available personas
-2. **Select the appropriate persona** based on the task execution context
-3. **Load the selected persona file** from the path specified in persona-selection.md
-4. **Apply persona principles** throughout the entire task execution process
-
-This is NOT optional - persona selection MUST happen first before any task execution.
+1. **Load core principles** from `~/.claude/instructions/core/minimalist-principles.md`
+2. **Load standards loader** from `~/.claude/instructions/core/standards-loader.md`
+3. **Apply appropriate standards** based on the files being modified
+4. **Apply minimalist principles** throughout the entire task execution process
 
 ## Purpose
 
@@ -24,10 +22,10 @@ Worker agent executes assigned tasks from inbox with file-level locking to preve
 
 You are a worker agent responsible for executing tasks. Your job is to:
 
-1. **PERSONA**: Read persona-selection.md and load appropriate persona FIRST
+1. **LOAD**: Read core instructions and standards FIRST
 2. **READ**: Check inbox for assigned tasks
 3. **LOCK**: Acquire file locks before modifications
-4. **EXECUTE**: Complete assigned tasks with persona principles
+4. **EXECUTE**: Complete assigned tasks with minimalist principles
 5. **REPORT**: Update outbox with results
 
 ## Workflow
@@ -36,11 +34,13 @@ You are a worker agent responsible for executing tasks. Your job is to:
 
 ```markdown
 # Worker 1 Assignment
+
 <!-- Read from: {session_folder}/messages/worker-{id}-inbox.md -->
 
 You are worker-1 in session .tmp/20241209-143022-refactor/parallel-session
 
 ## Your Tasks
+
 - T001: Update the authenticate function in src/auth.js to use async/await
 - T003: Add input validation to src/api.js getUser function
 - T005: Run tests for authentication module
@@ -56,10 +56,11 @@ Load shared context from `{session_folder}/context.md` for codebase information.
 
 ### 3. Apply Context-Based Approach
 
-Execute tasks using context-appropriate approach from `instructions/persona-selection.md`:
-- Understand task context to determine appropriate approach
-- Apply relevant principles based on task type
-- Use custom approach if specified
+Execute tasks using appropriate standards and principles:
+
+- Load language-specific standards based on file types
+- Apply minimalist principles to all changes
+- Use the Minimalist Test for decision making
 
 ### 4. File Locking
 
@@ -106,33 +107,44 @@ Track all files modified during task execution for code review stage.
 
 ```markdown
 # Worker 1 Report
+
 <!-- Status report from worker-1 -->
 
 ## Summary
+
 Completed 2 of 3 tasks. One task failed due to file lock.
 
 ## Completed Tasks
+
 <!-- Successfully executed -->
+
 - T001: Updated authenticate function in src/auth.js @ L15
 - T003: Added validation to src/api.js @ L67
 
 ## Failed Tasks
+
 <!-- Could not complete -->
+
 - T005: src/config.js locked by worker-2
 
 ## Files Modified
+
 <!-- All files changed for code review stage -->
+
 - /absolute/path/to/file1.js
 - /absolute/path/to/file2.py
 
 ## Approach Used
+
 Context-appropriate execution based on task requirements
 
 ## Timestamp
+
 2024-12-09T14:30:22Z
 ```
 
 The `files_modified` array should include absolute paths to all files that were:
+
 - Created with Write tool
 - Modified with Edit tool
 - Modified with MultiEdit tool

@@ -9,9 +9,32 @@ When this command is invoked, immediately begin executing tasks. Do not ask for 
 
 ## Execution Instructions
 
-### Step 1: Load Persona
+### Step 1: Load Core Instructions and Analyze Context
 
-Read `instructions/persona-selection.md` and load the appropriate persona (typically senior-engineer for implementation tasks).
+Load core instructions from CLAUDE.md Instructions Index. These are already available in the session context.
+
+#### Context Detection
+
+- Check if a plan exists from previous /plan command with codebase analysis
+- If no prior context, perform quick codebase scan:
+  - Check package.json for JavaScript/TypeScript projects
+  - Check requirements.txt or pyproject.toml for Python projects
+  - Scan file extensions in current directory
+  - Identify primary technologies and frameworks
+
+#### Dynamic Instruction Loading
+
+Based on detected context and task patterns, apply relevant instructions from CLAUDE.md Instructions Index:
+
+- **Core Instructions**: minimalist-principles, standards-loader (always loaded)
+- **Language Standards**: Apply based on detected file types (javascript, python, svelte)
+- **Workflow Instructions**: Apply based on task patterns:
+  - State management tasks → hierarchical-state-machines
+  - UI/interface tasks → ui-ux-guidelines
+  - Business logic → business-patterns
+- **Documentation Standards**: When creating docs → documentation
+
+All instructions are pre-loaded from CLAUDE.md and applied silently without announcement.
 
 ### Step 2: Identify Task Source
 
