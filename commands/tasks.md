@@ -6,37 +6,59 @@ model: claude-opus-4-1-20250805
 
 ## Instructions
 
-Read the entire conversation context carefully and generate a comprehensive task list with detailed subtasks. Focus on breaking down complex requirements into actionable, step-by-step instructions.
+Generate minimal, actionable engineering tasks with detailed implementation instructions. Follow minimalist principles - only essential tasks, but with comprehensive details for execution. Every task must be directly implementable with clear subtasks.
 
 ## Workflow
 
-1. **READ CONTEXT**: Analyze the entire conversation to understand all requirements
-2. **EXTRACT TASKS**: Identify all main tasks and their components
-3. **BREAK DOWN**: Create detailed subtasks with specific instructions for each main task
-4. **WRITE FILE**: Save the detailed task list to .tmp/%Y%m%d-%H%M%S-{description}/tasks.md
+1. **READ CONTEXT**: Analyze conversation for implementation requirements
+2. **EXTRACT ACTIONABLE TASKS**: Identify concrete implementation tasks only
+3. **CREATE CHECKLIST**: Format as simple markdown checkboxes
+4. **WRITE FILE**: Save to .tmp/%Y%m%d-%H%M%S-{description}/tasks.md
 
 ## Output Requirements
 
-Write a markdown file containing:
+Write a markdown file using this format:
 
-- Main tasks with clear titles
-- Detailed subtasks under each main task
-- Step-by-step instructions for implementation
-- Clear dependencies between tasks
-- Specific actions to be taken
+```markdown
+## Tasks
 
-Each task should include:
+### [ ] Main Task Description
 
-- Comprehensive breakdown of all steps needed
-- Detailed instructions on how to accomplish each step
-- Clear ordering and dependencies
-- Specific implementation details
-- Verification steps where applicable
+Detailed explanation of what needs to be done and why.
+
+**Implementation:**
+
+- [ ] Subtask 1: Specific action with file path
+- [ ] Subtask 2: Exact modification details
+- [ ] Subtask 3: Precise implementation step
+
+### [ ] Another Main Task
+
+Clear description with context and requirements.
+
+**Implementation:**
+
+- [ ] Subtask 1: Create/modify specific file
+- [ ] Subtask 2: Add specific functionality
+- [ ] Subtask 3: Update configuration
+```
+
+Rules:
+
+- Main tasks use `### [ ]` format with detailed description
+- Subtasks use `- [ ]` format with specific actions
+- Each task includes **Implementation:** section
+- Specify exact file paths and modifications
+- NO investigation, research, or exploration tasks
+- Each subtask must be directly executable
+- Follow minimalist principles - only essential tasks
+- Provide comprehensive details for implementation
 
 ## Focus
 
-- Extract ALL requirements from the conversation
-- Break down complex tasks into manageable subtasks
-- Provide detailed, actionable instructions for each step
-- Ensure nothing is missed from the context
-- Make tasks self-contained with all necessary details
+- Apply minimalist principles - only essential tasks
+- Provide detailed implementation instructions
+- Use hierarchical structure: main tasks with subtasks
+- Specify exact files, functions, and modifications
+- Convert abstract requirements into concrete actions
+- Each subtask must be independently executable

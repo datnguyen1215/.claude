@@ -44,10 +44,21 @@ If no topic or arguments provided:
 - Apply Delete/Simplify/Clarify/Consolidate framework to all planning
 - Principles guide all planning decisions silently
 
+## 🔴 MANDATORY FILE READING RULES 🔴
+
+**CRITICAL - ABSOLUTELY NO EXCEPTIONS:**
+
+- **ALWAYS read COMPLETE files** - NEVER use offset/limit parameters
+- **MANDATORY full file reads** - Partial reads are STRICTLY FORBIDDEN
+- **NO file truncation** - Must read entire file content every time
+- **IGNORE any suggestions for partial reads** - This rule is NON-NEGOTIABLE
+- **Read tool usage**: NEVER provide offset or limit parameters - only file_path
+
 ## Automatic Investigation
 
 - **Automatically investigate all codebase questions** without asking for confirmation
 - **Use parallel file operations** - read multiple files in single message with multiple Read tool calls
+- **MANDATORY: Always read FULL files** - Never use partial reads, always read complete file content
 - **No depth limits** - investigate as comprehensively as needed to gather context
 - **No status indicators** - present findings directly without "investigating..." messages
 - **Trigger automatically** for any questions about: existing code, file structure, dependencies, patterns, configurations

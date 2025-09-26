@@ -5,83 +5,57 @@ description: Execute a plan from context or a task file
 
 ## Primary Directive
 
-When this command is invoked, immediately begin executing tasks. Do not ask for confirmation. Do not explain what you will do. Just start working.
+When this command is invoked, immediately execute ONLY the exact tasks specified. Do not ask for confirmation. Do not explain what you will do. Follow tasks EXACTLY as written - no deviations, no additions, no improvements.
 
 ## Execution Instructions
 
-### Step 1: Load Core Instructions and Analyze Context
+### Step 1: Load Core Standards
 
-Load core instructions from CLAUDE.md Instructions Index. These are already available in the session context.
+Before executing any tasks, read the necessary standards:
 
-#### Context Detection
+- **Load minimalist principles**: Read `~/.claude/instructions/core/minimalist-principles.md`
+- **Load standards loader**: Read `~/.claude/instructions/core/standards-loader.md`
+- **Apply appropriate language standards**: Based on file types in tasks (javascript, python, svelte, etc.)
+- Read these standards in parallel in a single message
 
-- Check if a plan exists from previous /plan command with codebase analysis
-- If no prior context, perform quick codebase scan:
-  - Check package.json for JavaScript/TypeScript projects
-  - Check requirements.txt or pyproject.toml for Python projects
-  - Scan file extensions in current directory
-  - Identify primary technologies and frameworks
+### Step 2: Execute Tasks
 
-#### Dynamic Instruction Loading
-
-Based on detected context and task patterns, apply relevant instructions from CLAUDE.md Instructions Index:
-
-- **Core Instructions**: minimalist-principles, standards-loader (always loaded)
-- **Language Standards**: Apply based on detected file types (javascript, python, svelte)
-- **Workflow Instructions**: Apply based on task patterns:
-  - State management tasks → hierarchical-state-machines
-  - UI/interface tasks → ui-ux-guidelines
-  - Business logic → business-patterns
-- **Documentation Standards**: When creating docs → documentation
-
-All instructions are pre-loaded from CLAUDE.md and applied silently without announcement.
-
-### Step 2: Identify Task Source
-
-Determine where tasks come from:
-
-- **Plan in conversation**: Look for a plan created by /plan command or discussion
-- **Task file**: Check if a file path was provided or /tasks was used
-- **Direct request**: Extract tasks from the user's current request
-
-### Step 3: Execute Tasks
-
-- Use TodoWrite to create and track all tasks
+- Read any target files that need modification (in parallel)
+- Use TodoWrite to track exact tasks as specified
 - Mark each task as in_progress before starting
-- Execute using appropriate tools (Read, Write, Edit, Bash, etc.)
+- Execute EXACTLY as written - no additions or improvements
+- Apply loaded standards to all code changes
+- Do NOT create new files unless explicitly specified in the task
+- Do NOT run tests unless explicitly specified in the task
+- Do NOT add features or fixes beyond what's requested
 - Mark completed immediately after finishing each task
-- Continue even if individual tasks fail
 
-### Step 4: Report Completion
+### Step 3: Report Completion
 
-After all tasks are attempted, provide a brief summary of what was accomplished.
+After all tasks are completed, provide a brief factual summary of what was done.
 
 ## Behavioral Rules
 
-- **No planning phase** - Start executing immediately
-- **No validation questions** - Make reasonable assumptions
-- **No explanatory preambles** - Jump straight into work
-- **Track everything** - Use TodoWrite for all task management
-- **Complete the mission** - Continue through errors and obstacles
-
-## Error Handling
-
-When encountering errors:
-
-- Log the error briefly
-- Mark task as completed (even if failed)
-- Move to next task
-- Include failures in final summary
+- **Load standards first** - Read core standards before any task execution
+- **Read before editing** - Always read files before modifying them
+- **Parallel reads** - Batch all reads together in one message
+- **Apply standards** - Use loaded standards for all code changes
+- **No exploration** - Work only with current context
+- **No additions** - Don't create anything not explicitly requested
+- **No testing** - Don't run tests unless specifically asked
+- **No improvements** - Follow tasks exactly as written
+- **No deviations** - Stick to the exact task list
+- **Track everything** - Use TodoWrite for exact tasks only
 
 ## Success Criteria
 
 The command succeeds when:
 
-- All identified tasks have been attempted
-- TodoWrite shows clear progress tracking
-- A completion summary is provided
-- User can see what was done
+- All specified tasks executed exactly as written
+- Nothing created beyond what was requested
+- No tests run unless explicitly asked
+- TodoWrite shows exact task tracking
 
 ## Remember
 
-This is an ACTION command, not a planning command. The time for discussion has passed. Execute swiftly and efficiently.
+Execute ONLY what is specified. No more, no less. Follow tasks EXACTLY without deviation, addition, or improvement.
