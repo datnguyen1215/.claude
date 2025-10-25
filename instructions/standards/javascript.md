@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Technical standards and best practices for JavaScript projects. These standards focus on measurable quality metrics and proven patterns.
+Technical standards and best practices for JavaScript projects focusing on clean, maintainable code.
 
 ## Language Requirements
 
@@ -14,6 +14,13 @@ Technical standards and best practices for JavaScript projects. These standards 
 - **Template Literals:** For string interpolation
 - **Destructuring:** For cleaner variable assignment
 - **Spread/Rest:** For array/object operations
+
+### Import Conventions
+
+- **Always:** Use namespace imports for modules: `import * as moduleName from 'module'`
+- **Never:** Import individual named exports
+- **Benefit:** Creates clear namespaces and improves code readability
+- **Pattern:** All module imports use the namespace pattern to provide clear context
 
 ### Async Patterns
 
@@ -48,24 +55,19 @@ Technical standards and best practices for JavaScript projects. These standards 
 - **Freeze:** Consider Object.freeze for true constants
 - **Libraries:** Consider Immutable.js or Immer for complex cases
 
-### Composition Patterns
+## Preferred Patterns
 
-```javascript
-// Prefer composition
-const withLogging =
-  (fn) =>
-  (...args) => {
-    const result = fn(...args);
-    console.log(result);
-    return result;
-  };
+### Module Organization
 
-// Over classes
-const createUser = (name) => ({
-  name,
-  greet: () => `Hello, ${name}`,
-});
-```
+1. **Modules** - Export functions directly from files
+2. **Singletons** - IIFE modules for stateful behavior
+3. **Functional Composition** - Compose small functions into larger ones
+
+### Pattern Details
+
+- **Modules:** Export functions directly, leveraging ES6 module system
+- **Singletons:** Use IIFE pattern to create modules with encapsulated state
+- **Composition:** Build complex functionality by composing pure functions
 
 ## Code Structure Limits
 
@@ -83,34 +85,13 @@ const createUser = (name) => ({
 - **Multiple Statements:** Always use braces for multiple statements
 - **Nested Conditions:** Always use braces when nesting to maintain clarity
 - **Line Length:** Keep single-statement conditions on one line if under 80 chars
-- **Examples:**
-
-  ```javascript
-  // Good - single statement, no braces
-  if (!value) throw new Error("Value required");
-  if (isValid) return true;
-
-  // Good - multiple statements, use braces
-  if (error) {
-    logger.error(error);
-    throw error;
-  }
-  ```
 
 ### File Metrics
 
 - **Length:** Maximum 150 lines (warn at 100)
 - **Exports:** One primary export per file
-- **Imports:** Group and order consistently
+- **Imports:** Always use namespace imports, group and order consistently
 - **Dependencies:** Justify each external dependency
-
-### When Classes Are Justified
-
-- **Framework Requirements:** When framework demands classes (rare)
-- **Performance:** Proven performance benefit (measured)
-- **External APIs:** When interfacing with class-based libraries
-- **Always Prefer:** Factory functions and object composition
-- **Never:** Use classes for simple data structures or utilities
 
 ## Naming Conventions
 
@@ -118,9 +99,19 @@ const createUser = (name) => ({
 
 - **Variables:** camelCase, descriptive (minimum 3 characters)
 - **Constants:** UPPER_SNAKE_CASE for true constants
-- **Functions:** verbNoun pattern (e.g., `getUserData`)
+- **Functions:** Short verb patterns leveraging namespace context
+- **Principle:** Namespace provides context, function name provides action only
+- **Good Examples:** `db.connect()`, `db.query()`, `user.create()`, `cache.clear()`
+- **Bad Examples:** `db.connectDatabase()`, `db.queryDatabase()`, `user.createUser()`
 - **Booleans:** is/has/should prefix (e.g., `isValid`)
 - **Arrays:** Plural nouns (e.g., `users`, `items`)
+
+### Naming With Namespaces
+
+- Since all imports use namespace pattern, keep function names short
+- Namespace provides domain context
+- Function name provides action only
+- Avoid redundant naming that repeats the namespace
 
 ### Files and Directories
 
@@ -144,70 +135,47 @@ const createUser = (name) => ({
 
 - **Type Coercion:** Implicit type conversions
 - **Global Variables:** Polluting global scope
-- **Mutable Operations:** Any mutation of objects/arrays (critical anti-pattern)
-- **Class Overuse:** Using classes when functions suffice
+- **Mutable Operations:** Any mutation of objects/arrays
 - **Stateful Functions:** Functions with side effects
 - **Imperative Loops:** Using for/while instead of map/filter/reduce
 - **Synchronous Operations:** Blocking I/O in Node.js
 - **Memory Leaks:** Uncleaned event listeners, timers
+- **Individual Imports:** Using named imports instead of namespace imports
+- **Redundant Names:** Function names that repeat the namespace context
 
 ## Documentation Requirements
 
-### Purpose
-
-AI-friendly documentation requirements for JavaScript projects. Focused on machine-readable, parseable documentation without verbose examples.
-
 ### File Documentation
 
-#### Required File Header
-
-Every JavaScript file must start with a module description:
-
-```javascript
-/**
- * Brief description of what this module does with purpose
- */
-```
+- Every JavaScript file must start with a module description
+- Brief description of module purpose
+- Use JSDoc format for documentation
 
 ### Function Documentation
 
-#### Required Elements
+Every function must include:
 
-Every function must include, even inner/private ones:
+- Brief description of function purpose
+- Parameter types and descriptions using @param
+- Return value type and description using @returns
+- Error conditions using @throws
 
-```javascript
-/**
- * Brief description of function purpose
- * @param {type} paramName - Parameter description
- * @returns {type} Return value description
- * @throws {ErrorType} When and why errors occur
- */
-```
-
-#### Documentation Rules
+### Documentation Rules
 
 - **Brevity:** One-line descriptions preferred
 - **No Examples:** Don't include code examples in comments
 - **Type Accuracy:** Use correct JavaScript types
-- **Optional Params:** Mark with brackets: `[paramName]`
-- **Default Values:** Document with equals: `paramName=defaultValue`
+- **Optional Params:** Mark with brackets in JSDoc
+- **Default Values:** Document with equals sign
 
 ### Type Definitions
 
-#### Complex Types
+- Define reusable types at file top using @typedef
+- Document all object properties
+- Include type for every parameter
+- Use consistent naming for types
 
-Define reusable types at file top:
-
-```javascript
-/**
- * @typedef {Object} UserConfig
- * @property {string} name - User identifier
- * @property {number} timeout - Milliseconds before timeout
- * @property {boolean} [optional] - Optional flag
- */
-```
-
-#### Common Type Patterns
+### Common Type Patterns
 
 - **Arrays:** `{Array<string>}` or `{string[]}`
 - **Objects:** `{Object}` or custom `@typedef`
@@ -216,173 +184,30 @@ Define reusable types at file top:
 - **Union Types:** `{string|number}`
 - **Any:** Avoid, use `{*}` only when truly any type
 
-### Class Documentation
-
-#### Class Header
-
-```javascript
-/**
- * Brief class description
- * @class
- * @extends {ParentClass}
- */
-```
-
-#### Constructor and Methods
-
-```javascript
-/**
- * @constructor
- * @param {type} param - Description
- */
-
-/**
- * Method description
- * @public/@private/@protected
- * @param {type} param - Description
- * @returns {type} Description
- */
-```
-
 ### Special Tags
-
-#### Priority Tags
 
 - **@deprecated** - Mark obsolete code
 - **@since** - Version when added
 - **@todo** - Pending improvements
 - **@see** - Reference related code
 - **@async** - Mark async functions
-- **@static** - Static class methods
-- **@override** - Overridden methods
-
-#### Access Modifiers
-
+- **@static** - Static methods
 - **@public** - Public API
 - **@private** - Internal use only
 - **@protected** - Subclass access
 - **@readonly** - Read-only properties
 
-### AI-Friendly Patterns
+### Documentation Requirements
 
-#### Machine Parsing
+- All exported functions must be documented
+- All module files must have file headers
+- Complex data structures must have @typedef
+- Error conditions must be documented
+
+### AI-Friendly Patterns
 
 - Use consistent tag order
 - Always include types in braces
 - Keep descriptions on same line as tag
 - Use standard JSDoc tags only
 - Avoid custom or framework-specific tags
-
-#### Structured Data
-
-- Define all data structures with @typedef
-- Use consistent naming for types
-- Document all object properties
-- Include type for every parameter
-
-### Validation Rules
-
-#### Must Document
-
-- All exported functions
-- All public class methods
-- All module files
-- Complex data structures
-- Error conditions
-
-#### Optional Documentation
-
-- Private helper functions under 5 lines
-- Simple getters/setters
-- Obvious utility functions
-- Test helper functions
-
-### Integration
-
-#### Tooling Compatibility
-
-- Compatible with JSDoc parser
-- VS Code IntelliSense support
-- Documentation generation ready
-- Type checking with TypeScript JSDoc mode
-
-## Performance Considerations
-
-### Memory Management
-
-- **Cleanup:** Remove listeners, clear timers
-- **References:** Avoid circular references
-- **Closures:** Be aware of closure scope
-- **Large Data:** Use streams or pagination
-
-## Error Handling
-
-### Error Patterns
-
-- **Specific Errors:** Create custom error classes
-- **Error Messages:** Descriptive and actionable
-- **Logging:** Log errors with context
-- **Recovery:** Graceful degradation when possible
-- **User Feedback:** Clear error messages to users
-
-## Security Requirements
-
-### Input Validation
-
-- **Always Validate:** Never trust user input
-- **Sanitization:** Clean data before use
-- **Parameterization:** Use parameterized queries
-- **Authentication:** Verify user identity
-- **Authorization:** Check permissions
-
-### Common Vulnerabilities
-
-- **XSS:** Escape output, use CSP
-- **Injection:** Parameterize all queries
-- **CSRF:** Use tokens for state changes
-- **Dependencies:** Keep dependencies updated
-- **Secrets:** Never commit secrets to code
-
-## Code Review Checklist
-
-### Must Fix (Critical)
-
-- [ ] Functions over 30 lines
-- [ ] Files over 150 lines
-- [ ] Nested callbacks or promise chains
-- [ ] Security vulnerabilities
-- [ ] Memory leaks
-- [ ] Direct mutations of data
-- [ ] Unnecessary class usage
-- [ ] Side effects in pure functions
-
-### Should Fix (Important)
-
-- [ ] Functions over 20 lines
-- [ ] More than 3 parameters
-- [ ] Deep nesting (>3 levels)
-- [ ] Missing error handling
-- [ ] Code duplication (>5 lines)
-- [ ] Imperative code that could be declarative
-- [ ] Missing pure function documentation
-- [ ] Stateful operations
-
-### Consider Fixing (Suggested)
-
-- [ ] Complex conditionals
-- [ ] Missing tests for critical paths
-- [ ] Inconsistent naming
-- [ ] Performance optimizations
-- [ ] Additional documentation
-- [ ] Unnecessary braces on single-statement conditions
-
-## Exceptions
-
-Justified complexity is acceptable when:
-
-- Required by external APIs
-- Significant performance improvement (measured)
-- Framework requirements
-- Legacy system constraints
-
-Document why the exception exists and contain its scope.
