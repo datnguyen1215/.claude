@@ -6,3 +6,6 @@ todos/
 plugins/
 .update*
 .tmp/
+debug/
+file-history/
+history.jsonl
