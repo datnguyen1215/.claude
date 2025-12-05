@@ -10,7 +10,7 @@ Technical standards and best practices for JavaScript projects focusing on clean
 
 - **Required:** Use ES6+ features unless project uses CommonJS
 - **Const/Let:** Never use `var`, prefer `const` over `let`
-- **Arrow Functions:** For callbacks and simple functions
+- **Arrow Functions:** Must use arrow functions for functions
 - **Template Literals:** For string interpolation
 - **Destructuring:** For cleaner variable assignment
 - **Spread/Rest:** For array/object operations
