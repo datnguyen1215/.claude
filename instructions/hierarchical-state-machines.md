@@ -79,9 +79,21 @@ Complete reference for implementing state machines using @datnguyen1215/hsmjs li
 
 ### subscribe(callback)
 
-- `callback`: Function receiving `(state, context)` parameters
+- `callback`: Function receiving `{previousState, nextState, event}` object
+  - `previousState`: Object with `{state, context}` before transition
+  - `nextState`: Object with `{state, context}` after transition
+  - `event`: Object with `{type, ...payload}` that triggered transition
 - Returns: Unsubscribe function
 - Executes on every state change
+
+**Example**:
+
+```typescript
+machine.subscribe(({ previousState, nextState, event }) => {
+  console.log(`${previousState.state} -> ${nextState.state} (${event.type})`);
+  syncState(nextState.state, nextState.context);
+});
+```
 
 ### restore(snapshot)
 
