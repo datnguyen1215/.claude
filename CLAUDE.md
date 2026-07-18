@@ -4,6 +4,13 @@
 - Clarity over cleverness.
 - Done = nothing left to remove.
 
+## Git
+
+- Commit messages: short. One-line subject only. No body unless user asks.
+- vsb project: work on `main` branch.
+- browsercast-server project: work on `main` branch.
+- browsercast-server: do NOT modify Android or iOS apps.
+
 ## Instructions (load on demand)
 
 Read these when the task matches:

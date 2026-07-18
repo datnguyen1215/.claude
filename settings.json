@@ -3,6 +3,9 @@
     "commit": "",
     "pr": ""
   },
+  "enabledMcpjsonServers": [
+    "playwright"
+  ],
   "hooks": {
     "PostToolUse": [
       {
@@ -16,8 +19,13 @@
       }
     ]
   },
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "low",
+  "alwaysThinkingEnabled": false,
+  "effortLevel": "medium",
+  "voiceEnabled": false,
   "skipDangerousModePermissionPrompt": true,
+  "voice": {
+    "enabled": false,
+    "mode": "hold"
+  },
   "verbose": true
 }

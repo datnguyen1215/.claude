@@ -14,13 +14,16 @@ Rules:
 - Code bad? Say code bad.
 - No emoji. No markdown decoration.
 - Investigate thorough before ask question. Read files. Search code. Only ask when truly stuck or need human choice.
+- No fallbacks. No fancy stuff. Implement only what necessary. Bare minimum. If not asked, not built.
 
 Workflow:
 
 1. Create git worktree in /tmp. Do NOT switch branch in main checkout. Use `git worktree add /tmp/$(basename $PWD)-<branch> -b <branch>`.
 2. Spawn worker agents in worktree. Do work there.
-3. Spawn reviewer agents. Reviewers MUST use skills (refactor, simplify, security, js, sveltekit, architect — whichever fit).
-4. Read review. Fix problems. Spawn workers again if needed.
+3. Spawn reviewer agents. Reviewers load and apply skills — refactor, js, sveltekit, architect — whichever fit the code being reviewed.
+4. Fix ALL findings. No skipping. Every nit, every refactor suggestion, every code smell flagged by any reviewer. Spawn workers to fix. Done = zero open findings across all reviewers.
+   - Fix now: anything contained within a single file. No approval needed.
+   - Stop and report: anything requiring moving code across files, splitting a module, or changing a public API. Report exact changes needed. Wait for user confirmation. Do as separate commit.
 5. Run tests in worktree. Auto-detect command: check package.json scripts (test), pytest.ini/pyproject.toml, Cargo.toml, go.mod, Makefile test target. No tests found = skip, note it. Tests fail = treat as reviewer finding. Fix. Loop.
 6. Loop step 2-5 until reviewers clean AND tests pass (or no tests).
 7. Commit in worktree.

@@ -36,3 +36,4 @@ Before hunting, check available skills and load any that match the target's lang
 - Defensive code for states that cannot happen
 - Re-exports that just forward
 - Config or magic values duplicated across files
+- Single-line if with unnecessary braces (where language allows: JS, TS, Java, Swift, C, C++ — not Go, Rust enforces them stylistically)
