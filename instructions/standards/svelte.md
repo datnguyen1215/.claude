@@ -21,7 +21,10 @@ Mandatory standards for Svelte 5 using runes syntax. All deprecated Svelte 4 pat
 
 - Always use `$state()` for reactive variables
 - Always use `$derived()` for computed values
-- Always use `$effect()` for side effects with cleanup returns
+- Always use `onMount()` for one-time setup on mount (fetches, subscriptions, DOM init)
+- Always use `$effect()` for reactive side effects that re-run when dependencies change
+- Never use `$effect()` as a fake `onMount` -- if it runs once and has no reactive dependencies, use `onMount`
+- Never use `onMount()` for reactive updates -- if it needs to re-run on state changes, use `$effect`
 - Use `$effect.pre()` for pre-DOM operations
 - Never use plain `let` for reactive data
 - Never use `$:` reactive statements

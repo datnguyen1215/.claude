@@ -151,6 +151,13 @@ Technical standards and best practices for JavaScript projects focusing on clean
 - Brief description of module purpose
 - Use JSDoc format for documentation
 
+```js
+/**
+ * User authentication and session management.
+ * Handles login, logout, and token refresh.
+ */
+```
+
 ### Function Documentation
 
 Every function must include:
@@ -159,6 +166,16 @@ Every function must include:
 - Parameter types and descriptions using @param
 - Return value type and description using @returns
 - Error conditions using @throws
+
+```js
+/**
+ * Validate user credentials against the database.
+ * @param {string} email - User email address
+ * @param {string} password - Plain text password
+ * @returns {Promise<User>} Authenticated user object
+ * @throws {AuthError} When credentials are invalid
+ */
+```
 
 ### Documentation Rules
 
