@@ -1,11 +1,6 @@
-projects/
-.credentials.json
-shell-snapshots/
-statsig/
-todos/
-plugins/
-.update*
-.tmp/
-debug/
-file-history/
-history.jsonl
+*
+!commands/
+!instructions/
+!settings.json
+!CLAUDE.md
+!.gitignore

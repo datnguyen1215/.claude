@@ -7,6 +7,7 @@
 ## Git
 
 - Commit messages: short. One-line subject only. No body unless user asks.
+- lessio project: work on `main` branch. Commit directly to `main` -- never create a feature branch.
 - vsb project: work on `main` branch.
 - browsercast-server project: work on `main` branch.
 - browsercast-server: do NOT modify Android or iOS apps.

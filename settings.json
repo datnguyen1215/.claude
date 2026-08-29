@@ -6,6 +6,10 @@
   "enabledMcpjsonServers": [
     "playwright"
   ],
+  "env": {
+    "TMPDIR": "/home/dnguyen/tmp",
+    "DISABLE_AUTOUPDATER": "1"
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -21,11 +25,13 @@
   },
   "alwaysThinkingEnabled": false,
   "effortLevel": "medium",
-  "voiceEnabled": false,
-  "skipDangerousModePermissionPrompt": true,
+  "tui": "fullscreen",
   "voice": {
     "enabled": false,
     "mode": "hold"
   },
-  "verbose": true
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "verbose": true,
+  "voiceEnabled": false
 }

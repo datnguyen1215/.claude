@@ -99,6 +99,12 @@ Mandatory standards for Svelte 5 using runes syntax. All deprecated Svelte 4 pat
 - Include `$derived()` getters
 - Export instances for sharing
 
+**Reactive collections:**
+
+- `Map` / `Set` / `Date` / `URL` / `URLSearchParams` inside plain `$state()` are NOT deeply reactive — mutating methods (`map.set`, `set.add`, `date.setHours`) do not invalidate `$derived` readers
+- Use `SvelteMap`, `SvelteSet`, `SvelteDate`, `SvelteURL`, `SvelteURLSearchParams` from `svelte/reactivity`
+- If you must use a plain `Map`/`Set`, reassign on every write (`s = new Map(s).set(k, v)`) — but prefer the `Svelte*` variants
+
 ### Navigation (SvelteKit)
 
 **Required Imports:**
